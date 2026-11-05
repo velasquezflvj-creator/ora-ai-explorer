@@ -104,3 +104,9 @@ Las ventanas intermedias conservan una tarjeta lateral compacta. En teléfonos,
 La ficha y el selector de escritorio son idénticos al demo de Nicolás; en móvil y tableta
 se usa la misma tarjeta anclada al piso elegido y fichas compactas. Detalles, pruebas y el
 iniciador para Mac: [docs/fidelidad-visual.md](docs/fidelidad-visual.md).
+
+## Apartamento 104 en 3D (fase 2)
+
+Primer apartamento real navegable, Torre 1, apto 104, construido desde los planos DWG:
+[apartamento-104/](apartamento-104/README.md). Las medidas verificadas y pendientes están en
+[apartamento-104/MEDIDAS.md](apartamento-104/MEDIDAS.md).
