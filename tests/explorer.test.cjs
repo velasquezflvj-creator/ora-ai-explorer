@@ -290,3 +290,26 @@ test('volver cancela una búsqueda pendiente sin esperar al timeout', async t =>
   await page.waitForFunction(() => ORA_API.state.state === 'ext' && !ORA_API.state.busy, null, { timeout: 2000 });
   assert.equal(await page.locator('#mediaStatus').isVisible(), false);
 });
+
+for (const [width,height] of [[1440,900],[1280,800],[900,768],[768,1024],[390,844]]) {
+ test(`tarjeta de pisos anclada y acotada al redimensionar ${width}x${height}`, async t => {
+  const page=await open(t,{viewport:{width,height}});
+  for(const tod of ['day','night']) {
+   await page.evaluate(tod=>ORA_API.setTod(tod),tod);
+   for(const plane of ['T1','T2L','T2R']) {
+    for(const k of [1,5,15]) {
+     await page.evaluate(({tod,plane,k})=>ORA_API.hover(tod,plane,k),{tod,plane,k});
+     const r=await page.locator('#tip').boundingBox();
+     assert(r.width<=280&&r.width>=244,'ancho compacto');
+     assert(r.x>=13&&r.x+r.width<=width-13,'dentro del ancho útil');
+     assert(r.y>=83&&r.y+r.height<=height-95,'separada de cabecera y controles');
+    }
+   }
+  }
+  await page.setViewportSize({width:width===390?900:390,height:844});
+  await page.waitForTimeout(50);
+  const r=await page.locator('#tip').boundingBox();
+  const resized=page.viewportSize();
+  assert(r.x>=13&&r.x+r.width<=resized.width-13&&r.width===244);
+ });
+}

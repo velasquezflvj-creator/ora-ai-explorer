@@ -111,7 +111,7 @@ body.mode-amen #hot .pins { display: inline; }
 .tip-line { position: absolute; left: 0; top: 0; height: 1px; background: linear-gradient(90deg, rgba(242, 224, 176, .95), rgba(242, 224, 176, .4)); transform-origin: 0 50%; opacity: 0; transition: opacity .2s; }
 .tip {
   position: absolute; left: 0; top: 0; pointer-events: auto; display: flex; align-items: center; gap: 14px;
-  min-width: 244px; padding: 12px 18px 12px 14px; text-align: left; color: var(--ink); cursor: pointer;
+  width: max-content; max-width: calc(100vw - 28px); min-width: 244px; padding: 12px 18px 12px 14px; text-align: left; color: var(--ink); cursor: pointer;
   background: var(--glass); -webkit-backdrop-filter: blur(12px) saturate(1.2); backdrop-filter: blur(12px) saturate(1.2);
   border: 1px solid rgba(217, 194, 138, .42); border-radius: 2px;
   opacity: 0; visibility: hidden; transition: opacity .2s, visibility 0s .2s; box-shadow: 0 10px 40px rgba(0, 0, 0, .35);
@@ -225,8 +225,10 @@ body.mode-amen #hot .pins { display: inline; }
   .nav.open button { display: block; padding: 14px; text-align: left; }
   .nav.open .cta { text-align: center; }
   .media-status { top: 116px; }
-  .tip { left: 16px !important; right: 16px; top: auto !important; bottom: 76px; transform: none !important; min-width: 0; }
-  .dot, .tip-line { display: none; }
+  /* Keep the floor card anchored at every viewport width. */
+  .tip { width: 244px; padding: 10px 12px; gap: 10px; }
+  .tip strong { font-size: 19px; }
+  .tip .sp { font-size: 10px; }
   .hint { bottom: 84px; transition: opacity .2s; }
   body.tip-on .hint { opacity: 0; }
   .legal { display: none; }
@@ -257,17 +259,17 @@ body.mode-amen #hot .pins { display: inline; }
 /* Hoja inferior solo en teléfonos o ventanas bajas: detalles optativos y salida fija. */
 @media (max-width: 600px), (max-height: 500px) {
   .panel {
-    display: flex; flex-direction: column; left: var(--pad); right: var(--pad);
-    top: auto; bottom: max(18px, env(safe-area-inset-bottom)); width: auto;
+    display: flex; flex-direction: column; left: auto; right: var(--pad);
+    top: auto; bottom: max(18px, env(safe-area-inset-bottom)); width: min(280px, calc(100% - 2 * var(--pad)));
     transform: none; max-height: min(55svh, calc(100svh - 100px)); overflow: hidden;
     padding: 14px 18px;
   }
   .p-k, .p-t, .p-cta { flex-shrink: 0; }
-  .p-k, .p-t { padding-right: 108px; }
-  .p-t { font-size: 28px; margin: 6px 0 10px; }
+  .p-k, .p-t { padding-right: 88px; }
+  .p-t { font-size: 24px; margin: 6px 0 10px; }
   .panel-toggle {
     display: block; position: absolute; right: 18px; top: 16px; min-height: 44px;
-    padding: 8px 10px; border: 1px solid var(--line); background: none; color: var(--gold-2);
+    width: 82px; padding: 8px 6px; border: 1px solid var(--line); background: none; color: var(--gold-2);
     font: 500 10px/1.3 var(--sans); letter-spacing: .08em; cursor: pointer;
   }
   .panel-toggle:hover { border-color: var(--gold); }

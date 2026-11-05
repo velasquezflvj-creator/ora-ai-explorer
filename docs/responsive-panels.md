@@ -59,3 +59,10 @@ con Safari y en dispositivos físicos sigue siendo recomendable antes de publica
 Los controles de la ficha se agrupan en `panelDetails`, con acciones de salida
 fuera de la región desplazable. Esto permite reutilizar el patrón posteriormente,
 pero esta entrega no modifica ni integra el prototipo ni cambia el área de render.
+
+## Corrección de proporciones posterior
+
+La tarjeta de pisos permanece anclada y mide 244 px hasta 900 px; ya no se
+extiende entre los bordes de la ventana. La ficha plegable de teléfono tiene
+ancho máximo de 280 px. Véase [la entrega para auditoría](visual-proportions-audit.md)
+para la referencia original, las cinco resoluciones y las capturas reproducibles.

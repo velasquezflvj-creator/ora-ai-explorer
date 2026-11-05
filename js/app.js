@@ -175,15 +175,19 @@
     positionTip(h);
   }
   function positionTip(h) {
-    if (innerWidth <= 900) return;
     const vw = innerWidth, vh = innerHeight;
     const p = h.poly;
     const [sx, sy] = toScreen(p.c[0], p.c[1]);
     const tw = el.tip.offsetWidth, th = el.tip.offsetHeight;
-    let side = 'r', ex = toScreen(p.maxX, 0)[0] + 52;
-    if (ex + tw > vw - 18) { side = 'l'; ex = toScreen(p.minX, 0)[0] - 52 - tw; }
+    const gap = vw <= 900 ? 18 : 52;
+    let side = 'r', ex = toScreen(p.maxX, 0)[0] + gap;
+    if (ex + tw > vw - 18) { side = 'l'; ex = toScreen(p.minX, 0)[0] - gap - tw; }
+    // On narrow screens neither side may fit: stay close, above/below the floor
+    // instead of stretching across the facade. Keep header and day/night clear.
+    const beside = ex >= 14 && ex + tw <= vw - 14;
     ex = clamp(ex, 14, vw - tw - 14);
-    const ey = clamp(sy, th / 2 + 84, vh - th / 2 - 96);
+    const preferredY = beside ? sy : sy + th / 2 + 22;
+    const ey = clamp(preferredY, th / 2 + 84, vh - th / 2 - 96);
     el.tip.style.left = ex + 'px';
     el.tip.style.top = (ey - th / 2) + 'px';
     const lx = side === 'r' ? ex : ex + tw, ly = ey;
