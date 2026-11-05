@@ -91,3 +91,11 @@ El menú principal se oculta y queda fuera del foco durante el recorrido, y se r
 al terminar la animación de regreso. El CTA del panel y su configuración no cambian.
 Las restricciones de autoplay se simulan en las pruebas de escritorio y móvil;
 esto no sustituye una comprobación en un dispositivo iOS físico.
+
+## Laboratorio 3D independiente
+
+La prueba de concepto se encuentra en [`prototype/`](prototype/README.md).
+Es una maqueta sintética provisional, no representativa de los apartamentos reales.
+Ejecuta `npm ci` y `npm run start:prototype`, y abre
+`http://localhost:8770/prototype/`. La experiencia original de fachadas y videos
+se conserva en `/`. No se requiere publicación en GitHub Pages.

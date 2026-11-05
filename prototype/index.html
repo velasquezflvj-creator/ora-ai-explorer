@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow"><title>ORA AI · Laboratorio 3D provisional</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><a class="brand" href="../">◈ <span>ORA AI</span></a><span class="divider"></span><span class="lab">LABORATORIO 3D</span><span class="badge">MAQUETA PROVISIONAL</span></header>
+<main>
+  <section class="viewer" aria-label="Visor tridimensional interactivo">
+    <div id="viewport"><canvas id="scene" aria-label="Maqueta 3D: arrastra para mirar y utiliza los controles de navegación" tabindex="0"></canvas><div id="markers" aria-label="Habitaciones de la maqueta"></div></div>
+    <div class="scene-heading"><span class="eyebrow">UN ESPACIO, MUCHAS PERSPECTIVAS</span><h1>Entra. Mira. Explora.</h1><p>Una misma escena para descubrir, recorrer y personalizar.</p></div>
+    <nav class="modes" aria-label="Modo de cámara">
+      <button data-mode="orbit" aria-pressed="true">Vista general</button>
+      <button data-mode="cinematic" aria-pressed="false">▶ Presentación</button>
+      <button data-mode="walk" aria-pressed="false">Explorar</button>
+    </nav>
+    <div class="scene-footer"><span class="live-dot"></span><span id="modeHint">Arrastra para rotar · rueda o gesto de pinza para zoom</span><button id="reset" title="Restablecer cámara">↺ Restablecer</button></div>
+    <div id="walkControls" class="walk-controls" aria-label="Desplazamiento interior" hidden>
+      <button data-move="forward" aria-label="Avanzar">↑</button><div><button data-move="left" aria-label="Mover a la izquierda">←</button><button data-move="back" aria-label="Retroceder">↓</button><button data-move="right" aria-label="Mover a la derecha">→</button></div>
+    </div>
+    <p id="error" class="error" role="alert" hidden>No se pudo iniciar WebGL. Prueba un navegador con aceleración gráfica habilitada.</p>
+  </section>
+  <aside>
+    <div class="provisional"><span class="eyebrow">MAQUETA PROVISIONAL</span><h2>Prueba la experiencia.</h2><p>Distribución sintética de demostración. <strong>No representa los apartamentos reales de Pinares ni acredita áreas de 54 o 60 m².</strong></p></div>
+    <section class="panel-section"><div class="section-title"><h3>01 / Espacios</h3><span>SELECCIONA PARA ENTRAR</span></div><div class="rooms">
+      <button data-room="living"><span>01</span>Sala<span>↗</span></button><button data-room="kitchen"><span>02</span>Cocina<span>↗</span></button><button data-room="bedroom"><span>03</span>Habitación<span>↗</span></button><button data-room="bathroom"><span>04</span>Baño<span>↗</span></button>
+    </div></section>
+    <section class="panel-section"><div class="section-title"><h3>02 / Acabados</h3><span>CAMBIOS EN TIEMPO REAL</span></div><p class="field-label">Piso</p><div class="swatches" aria-label="Material del piso"><button data-floor="oak" aria-pressed="true"><i class="oak"></i>Roble</button><button data-floor="stone" aria-pressed="false"><i class="stone"></i>Piedra</button><button data-floor="clay" aria-pressed="false"><i class="clay"></i>Arcilla</button></div><label class="color-field">Color de muros <input id="wallColor" type="color" value="#ede6d8" aria-label="Color de muros"></label><p class="small">Paleta demostrativa, sin especificación comercial.</p></section>
+    <div class="status"><span class="eyebrow">ESTÁS EN</span><p id="selection" role="status" aria-live="polite">Vista general</p><p id="materialStatus" role="status" class="small">Piso: Roble</p></div>
+    <a class="reference" href="../">← Abrir explorador original</a>
+  </aside>
+</main>
+<footer>MAQUETA ABIERTA · GEOMETRÍA SINTÉTICA · SIN ESCALA ARQUITECTÓNICA VALIDADA <span>ORA AI / POC 01</span></footer>
+<script type="module" src="dist/app.js"></script>
+</body></html>

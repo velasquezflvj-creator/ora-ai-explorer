@@ -1,0 +1,11 @@
+const {test,before,after}=require('node:test');
+const assert=require('node:assert/strict');
+let model, collision;
+before(async()=>{collision=await import('../src/collision.mjs');model=(await import('../src/model.mjs')).createDemoModel();});
+after(()=>{model.group.traverse(o=>{o.geometry?.dispose();o.material?.dispose();});});
+test('todos los puntos de habitación son transitables',()=>{for(const room of model.rooms)assert(collision.canOccupy(room.point[0],room.point[2],model.obstacles),room.id);});
+test('los muros y muebles bloquean la ocupación',()=>{assert.equal(collision.canOccupy(-3,0,model.obstacles),false);assert.equal(collision.canOccupy(-3.8,-3.2,model.obstacles),false);});
+test('los cuatro pasos entre habitaciones permanecen abiertos',()=>{for(const [x,z] of [[-1.5,0],[2.9,0],[0,-2.9],[0,1.9]])assert(collision.canOccupy(x,z,model.obstacles));});
+test('un desplazamiento grande no atraviesa un muro',()=>{const p=collision.moveWithCollisions({x:-3,z:1},0,-5,model.obstacles);assert(p.z>.2);});
+test('el desplazamiento se desliza junto al muro',()=>{const p=collision.moveWithCollisions({x:-3.5,z:.4},.5,-1,model.obstacles);assert(p.x>-3.1);assert(p.z>.2);});
+test('no se puede salir del límite de la maqueta',()=>{const p=collision.moveWithCollisions({x:-1.5,z:2},100,100,model.obstacles);assert(p.x<=collision.bounds.maxX);assert(p.z<=collision.bounds.maxZ);assert(collision.canOccupy(p.x,p.z,model.obstacles));});
