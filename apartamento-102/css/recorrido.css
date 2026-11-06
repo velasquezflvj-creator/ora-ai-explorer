@@ -1,0 +1,11 @@
+/* Recorrido V2 del apartamento 102: controles adicionales (no cambia apto.css) */
+.btn-entrada { position: absolute; z-index: 12; right: var(--pad); bottom: calc(var(--pad) + 158px); padding: 9px 14px; border: 1px solid var(--line);
+  background: var(--glass); color: var(--gold-2); font: 500 11px/1 Inter, system-ui, sans-serif; letter-spacing: .14em; text-transform: uppercase; cursor: pointer;
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.btn-entrada[hidden] { display: none; }
+.btn-entrada:hover { color: var(--ink); }
+.joystick { position: absolute; z-index: 12; left: calc(var(--pad) + 6px); bottom: calc(var(--pad) + 46px); width: 112px; height: 112px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--glass); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); touch-action: none; display: grid; place-items: center; }
+.joystick[hidden] { display: none; }
+.joystick i { width: 46px; height: 46px; border-radius: 50%; background: var(--gold-2); opacity: .85; box-shadow: 0 4px 18px rgba(0,0,0,.35); transition: transform .08s ease-out; pointer-events: none; }
+@media (max-width: 700px) { .btn-entrada { bottom: calc(var(--pad) + 150px); } }

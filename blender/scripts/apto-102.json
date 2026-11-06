@@ -1,0 +1,189 @@
+{
+  "apartamento": "102",
+  "torre": "Torre 1",
+  "estado": "Propuesta de redistribución conceptual: no es planta verificada ni aprobada",
+  "escena": "Apto_102",
+  "origen_plano": [
+    4.037,
+    3.8
+  ],
+  "nota_origen": "plano local del visor (x este, y norte, m; origen esquina SO) = Blender (x + 4.037, y + 3.8)",
+  "texturas": {
+    "travertino": {
+      "metros": [
+        1.2,
+        1.2
+      ],
+      "px": 1024,
+      "color": "blender/recursos/descargas/ambientcg/Travertine009/Travertine009_2K-JPG_Color.jpg",
+      "normal": "blender/recursos/descargas/ambientcg/Travertine009/Travertine009_2K-JPG_NormalGL.jpg",
+      "rough": "blender/recursos/descargas/ambientcg/Travertine009/Travertine009_2K-JPG_Roughness.jpg"
+    },
+    "travertino_enchape": {
+      "metros": [
+        2.0,
+        2.0
+      ],
+      "px": 1024,
+      "color": "blender/recursos/descargas/ambientcg/Tiles139/Tiles139_2K-JPG_Color.jpg",
+      "normal": "blender/recursos/descargas/ambientcg/Tiles139/Tiles139_2K-JPG_NormalGL.jpg",
+      "rough": "blender/recursos/descargas/ambientcg/Tiles139/Tiles139_2K-JPG_Roughness.jpg",
+      "hsv": {
+        "hue": 0.5,
+        "sat": 0.55,
+        "val": 1.25
+      }
+    },
+    "roble": {
+      "metros": [
+        1.83,
+        1.83
+      ],
+      "px": 1024,
+      "hsv": {
+        "hue": 0.51,
+        "sat": 0.48,
+        "val": 1.95
+      },
+      "color": "blender/recursos/descargas/polyhaven/oak_veneer_01/oak_veneer_01_Diffuse_2k.jpg",
+      "normal": "blender/recursos/descargas/polyhaven/oak_veneer_01/oak_veneer_01_nor_gl_2k.jpg",
+      "rough": "blender/recursos/descargas/polyhaven/oak_veneer_01/oak_veneer_01_Rough_2k.jpg"
+    },
+    "yeso": {
+      "metros": [
+        3.0,
+        3.0
+      ],
+      "px": 1024,
+      "normal": "blender/recursos/descargas/polyhaven/beige_wall_001/beige_wall_001_nor_gl_2k.jpg",
+      "rough": "blender/recursos/descargas/polyhaven/beige_wall_001/beige_wall_001_Rough_2k.jpg"
+    },
+    "lino": {
+      "metros": [
+        0.27,
+        0.27
+      ],
+      "px": 512,
+      "normal": "blender/recursos/descargas/polyhaven/rough_linen/rough_linen_nor_gl_2k.jpg",
+      "rough": "blender/recursos/descargas/polyhaven/rough_linen/rough_linen_Rough_2k.jpg"
+    },
+    "boucle": {
+      "metros": [
+        0.31,
+        0.39
+      ],
+      "px": 512,
+      "normal": "blender/recursos/descargas/polyhaven/wool_boucle/wool_boucle_nor_gl_2k.jpg",
+      "rough": "blender/recursos/descargas/polyhaven/wool_boucle/wool_boucle_Rough_2k.jpg"
+    }
+  },
+  "piso": {
+    "clave": "piso_piedra",
+    "px": 2048,
+    "metros": 4.8,
+    "pieza": [
+      1.2,
+      0.6
+    ],
+    "trabado": true,
+    "semilla": 102,
+    "origen_metros": 1.2,
+    "color": "blender/recursos/descargas/ambientcg/Travertine009/Travertine009_2K-JPG_Color.jpg",
+    "normal": "blender/recursos/descargas/ambientcg/Travertine009/Travertine009_2K-JPG_NormalGL.jpg",
+    "rough": "blender/recursos/descargas/ambientcg/Travertine009/Travertine009_2K-JPG_Roughness.jpg",
+    "hsv": {
+      "hue": 0.5,
+      "sat": 0.45,
+      "val": 1.12
+    },
+    "tinte": [
+      0.89,
+      0.83,
+      0.76
+    ],
+    "suavizar_veta": 0.35,
+    "tono_medio": [
+      0.7,
+      0.64,
+      0.56
+    ],
+    "variacion": [
+      0.95,
+      1.03
+    ],
+    "rugosidad": [
+      0.3,
+      0.5
+    ],
+    "normal_fuerza": 0.15,
+    "junta_oscurece": 0.22,
+    "junta_cobertura": 0.6,
+    "junta_rugosidad": 0.85,
+    "junta_relieve": 0.25,
+    "nota_color": "hsv, tinte y tono_medio en espacio lineal, igual que el material piso_madera del render V3 (#f1ebe1 = 0.89, 0.83, 0.76 lineal)"
+  },
+  "sondas": {
+    "px": [
+      512,
+      256
+    ],
+    "muestras": 96,
+    "puntos": {
+      "sala": [
+        1.3,
+        2.0,
+        1.5
+      ],
+      "cocina": [
+        1.6,
+        5.6,
+        1.5
+      ],
+      "hall": [
+        4.0,
+        4.25,
+        1.5
+      ],
+      "habitacion_2": [
+        4.0,
+        1.9,
+        1.5
+      ],
+      "principal": [
+        6.6,
+        2.4,
+        1.5
+      ],
+      "bano_principal": [
+        5.75,
+        6.0,
+        1.5
+      ],
+      "bano_social": [
+        4.2,
+        5.9,
+        1.5
+      ],
+      "vestier": [
+        7.05,
+        5.3,
+        1.5
+      ],
+      "ropas": [
+        3.1,
+        5.05,
+        1.5
+      ],
+      "balcon": [
+        1.4,
+        -0.8,
+        1.5
+      ]
+    },
+    "espacios": {
+      "sala": "social",
+      "cocina": "social"
+    },
+    "nota": "Cada punto debe quedar sobre piso libre (fuera de las huellas de muebles y aparatos de propuesta-102.json)"
+  }
+}
