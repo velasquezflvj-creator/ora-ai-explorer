@@ -15,6 +15,8 @@ argv = sys.argv[sys.argv.index('--') + 1:]
 CFG = json.load(open(argv[0])); SALIDA = os.path.abspath(argv[1])
 PREVIA = argv[argv.index('--vista-previa') + 1] if '--vista-previa' in argv else None
 ESTIMAR = int(argv[argv.index('--estimar') + 1]) if '--estimar' in argv else 0
+PASO = int(argv[argv.index('--paso') + 1]) if '--paso' in argv else 2          # vista previa: 1 de cada N cuadros
+MUESTRAS_PREVIA = int(argv[argv.index('--muestras') + 1]) if '--muestras' in argv else 4
 V = CFG['video']; ox, oy = CFG['origen_plano']
 sc = bpy.data.scenes[CFG['escena']]
 if bpy.context.window: bpy.context.window.scene = sc
@@ -84,8 +86,10 @@ if ESTIMAR:
 if PREVIA:
     r.engine = 'BLENDER_EEVEE' if 'BLENDER_EEVEE' in [e.identifier for e in bpy.types.RenderSettings.bl_rna.properties['engine'].enum_items] else 'BLENDER_EEVEE_NEXT'
     r.resolution_x, r.resolution_y, r.resolution_percentage = 640, 360, 100
-    try: sc.eevee.taa_render_samples = 16
+    try: sc.eevee.taa_render_samples = MUESTRAS_PREVIA
     except Exception: pass
+    sc.frame_step = PASO; r.fps = max(1, fps // PASO)   # misma duración, menos cuadros
+    if hasattr(r.image_settings, 'media_type'): r.image_settings.media_type = 'VIDEO'   # Blender 5: el video es otro tipo de medio
     r.image_settings.file_format = 'FFMPEG'
     r.ffmpeg.format = 'MPEG4'; r.ffmpeg.codec = 'H264'; r.ffmpeg.constant_rate_factor = 'MEDIUM'
     r.filepath = os.path.abspath(PREVIA); r.use_stamp_note = True
