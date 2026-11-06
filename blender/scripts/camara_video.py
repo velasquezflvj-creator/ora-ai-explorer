@@ -46,6 +46,12 @@ for o in (cam, mira):   # movimiento lento con entrada/salida suaves; corte seco
     for fc in o.animation_data.action.fcurves if hasattr(o.animation_data.action, 'fcurves') else []:
         for k in fc.keyframe_points: k.interpolation = 'BEZIER'; k.easing = 'AUTO'
 sc.frame_start, sc.frame_end = 1, f - 1
+# exterior visto por las ventanas (solo rayos de cámara): más desenfocado y sobreexpuesto que en el V3
+ex = V.get('exterior')
+if ex and sc.world and sc.world.use_nodes:
+    for n in sc.world.node_tree.nodes:
+        if n.type == 'VECT_MATH' and n.operation == 'SCALE': n.inputs['Scale'].default_value = ex['desenfoque']
+        if n.type == 'HUE_SAT': n.inputs['Value'].default_value = ex['brillo']; n.inputs['Saturation'].default_value = ex['saturacion']
 r = sc.render
 r.use_stamp = True; r.use_stamp_note = True
 r.stamp_note_text = 'Apto 102 · Propuesta de redistribución conceptual – no es planta verificada ni aprobada. Balcón, acabados, muebles y exterior ilustrativos.'
