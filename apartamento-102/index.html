@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ORA AI · Apartamento 102 · Propuesta de redistribución</title>
+<meta name="theme-color" content="#050a14">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/apto.css">
+</head>
+<body class="is-loading">
+<div id="app">
+  <canvas id="scene" tabindex="0" aria-label="Propuesta de redistribución del apartamento 102 en 3D. Arrastra para mirar; usa los controles para recorrerlo."></canvas>
+  <div id="labels" aria-hidden="true"></div>
+  <div id="hotspots" role="group" aria-label="Espacios del apartamento"></div>
+
+  <header class="bar">
+    <a class="brand" href="../" aria-label="ORA AI · volver al explorador de torres">
+      <span class="mark" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M10 1 19 10 10 19 1 10Z" fill="none" stroke="currentColor"/><circle cx="10" cy="10" r="3.2" fill="none" stroke="currentColor"/></svg></span>
+      <span class="brand-name">ORA AI</span>
+      <span class="brand-sep"></span>
+      <span class="brand-tag">Torre 1 · Apartamento 102 · Propuesta</span>
+    </a>
+    <a class="cta" id="cta" href="#">Tour privado</a>
+  </header>
+
+  <!-- ficha del apartamento: misma familia visual que la tarjeta de piso de Nicolás -->
+  <section class="card" id="card" aria-label="Apartamento 102, propuesta de redistribución">
+    <span class="num"><small>APTO</small><b>102</b></span><i class="sep"></i>
+    <span class="body">
+      <span class="tw">Torre 1 · Rediseño conceptual</span>
+      <strong>2 habitaciones · 2 baños</strong>
+      <span class="sp">Área rotulada en plano: 60,42 m²</span>
+      <span class="chips"><em class="chip prop2" title="La distribución interior no es la del DWG: es una propuesta comercial">Propuesta de redistribución</em><em class="chip prop" id="chipProp" title="El balcón no figura en los planos DWG">+ Balcón propuesto</em></span>
+    </span>
+  </section>
+
+  <p class="propbanner" id="propBanner">Propuesta de redistribución – apto 102 <span>· rediseño conceptual, no planta verificada</span></p>
+
+  <p class="caption" id="caption" aria-live="polite"><small id="captionK"></small><span id="captionT"></span></p>
+
+  <aside class="panel" id="panel" aria-label="Opciones">
+    <button type="button" class="panel-toggle" id="panelToggle" aria-expanded="false" aria-controls="panelBody" aria-label="Ver opciones">Opciones</button>
+    <div id="panelBody">
+      <div class="tabs" id="tabs" role="tablist" aria-label="Opciones del apartamento">
+        <button type="button" role="tab" data-tab="espacios" aria-selected="true">Espacios</button>
+        <button type="button" role="tab" data-tab="acabados" aria-selected="false" tabindex="-1">Acabados</button>
+        <button type="button" role="tab" data-tab="capas" aria-selected="false" tabindex="-1">Capas</button>
+      </div>
+      <section data-pane="espacios" role="tabpanel" aria-label="Espacios">
+        <div class="p-k">Área neta de la propuesta</div>
+        <ul class="rooms" id="rooms"></ul>
+      </section>
+      <section data-pane="acabados" role="tabpanel" aria-label="Acabados" hidden>
+        <div class="p-k">Propuesta de acabados</div>
+        <div class="presets" id="presets"></div>
+        <p class="preset-note" id="presetNote"></p>
+        <div class="fin-row"><span>Piso</span><div class="swatches" data-fin="piso" id="floors" aria-label="Piso"></div></div>
+        <div class="fin-row"><span>Muros</span><div class="swatches" data-fin="muros" id="walls" aria-label="Muros"></div></div>
+        <div class="fin-row"><span>Cocina</span><div class="swatches" data-fin="cocina" id="kitchen" aria-label="Cocina"></div></div>
+        <div class="fin-row"><span>Baños</span><div class="swatches" data-fin="bano" id="bath" aria-label="Baños"></div></div>
+        <p class="note">Acabados <b>ilustrativos y no contractuales</b>: no corresponden necesariamente a las especificaciones del proyecto.</p>
+      </section>
+      <section data-pane="capas" role="tabpanel" aria-label="Capas" hidden>
+        <div class="p-k">Propuesta de diseño</div>
+        <label class="switch prop"><input type="checkbox" id="layerBalcony" checked> Balcón de 4,04 m² <small>no figura en los planos</small></label>
+        <div class="p-k">Capas</div>
+        <label class="switch"><input type="checkbox" id="layerFurniture" checked> Mobiliario de presentación</label>
+        <label class="switch"><input type="checkbox" id="layerDims"> Cotas del plano</label>
+        <label class="switch"><input type="checkbox" id="layerOriginal"> Planta original del DWG <small class="q">líneas rojas</small></label>
+        <label class="switch"><input type="checkbox" id="layerVerified"> Solo envolvente del DWG</label>
+        <div class="p-k">Luz</div>
+        <div class="presets seg2" id="hora" role="group" aria-label="Hora del día"><button type="button" data-h="dia" aria-pressed="true">Día</button><button type="button" data-h="atardecer" aria-pressed="false">Atardecer</button></div>
+        <div class="p-k">Calidad gráfica</div>
+        <div class="presets" id="calidad" role="group" aria-label="Calidad gráfica"><button type="button" data-q="baja">Baja</button><button type="button" data-q="media">Media</button><button type="button" data-q="alta">Alta</button></div>
+        <div class="p-k">Leyenda</div>
+        <ul class="legend">
+          <li class="verificado">Envolvente, vanos y ductos del DWG</li>
+          <li class="provisional">Medida provisional</li>
+          <li class="ilustrativo">Mobiliario y acabados ilustrativos</li>
+          <li class="propuesta">Redistribución y balcón propuestos</li>
+        </ul>
+        <p class="note">Rediseño conceptual, no planta verificada. Del DWG: envolvente, vanos de fachada, acceso y ductos. Tabiques, baños, cocina y balcón: propuesta. Alturas (2,40 m): provisionales. Acabados, muebles y paisaje: ilustrativos. <a href="PROPUESTA.md" target="_blank" rel="noopener">Propuesta</a></p>
+        <p class="note">Sofá «GlamVelvetSofa» (CC BY 4.0) y butaca «SheenChair» (CC0): Wayfair LLC, vía Khronos glTF-Sample-Assets. Cielo HDRI de Poly Haven (CC0). Árboles generados con ez-tree (MIT). <a href="CREDITOS.md" target="_blank" rel="noopener">Créditos</a></p>
+      </section>
+    </div>
+  </aside>
+
+  <p class="techtag" id="techTag" aria-live="polite"><b>Vista técnica</b> Envolvente del DWG y planta original en rojo · <i></i> alturas provisionales</p>
+  <p class="envtag" id="envTag" hidden>Entorno exterior conceptual · no representa la vista real</p>
+
+  <div id="pois" aria-label="Puntos de información"></div>
+  <div class="poi-card" id="poiCard" role="dialog" aria-labelledby="poiT" hidden>
+    <button type="button" class="x" id="poiClose" aria-label="Cerrar">×</button>
+    <small id="poiCat"></small><strong id="poiT"></strong><p id="poiD"></p>
+    <button type="button" class="link" id="poiAct" hidden>Cambiar acabados</button>
+  </div>
+
+  <div class="tourbar" id="tourbar" hidden>
+    <button type="button" class="tb-play" id="tourPlay" aria-label="Pausar recorrido"><span></span></button>
+    <div class="tb-info">
+      <p><small id="tourStep">1/12</small><span id="tourName">Vista general</span></p>
+      <div class="tb-bar" id="tourProgress" role="slider" aria-label="Avance del recorrido" aria-valuemin="0" aria-valuemax="100" tabindex="0"><b id="tourProg"></b><span id="tourChapters"></span></div>
+    </div>
+    <button type="button" class="tb-go" id="tourExplore">Explorar aquí</button>
+  </div>
+
+  <nav class="modes" id="modes" aria-label="Modo de recorrido">
+    <button type="button" data-mode="orbit" class="on" aria-pressed="true">Maqueta</button>
+    <button type="button" data-mode="tour" aria-pressed="false">▶ Recorrido</button>
+    <button type="button" data-mode="walk" aria-pressed="false">Caminar</button>
+  </nav>
+
+  <div class="walkpad" id="walkpad" hidden aria-label="Desplazamiento">
+    <button type="button" data-move="f" aria-label="Avanzar">↑</button>
+    <div><button type="button" data-move="l" aria-label="Girar a la izquierda">↺</button><button type="button" data-move="b" aria-label="Retroceder">↓</button><button type="button" data-move="r" aria-label="Girar a la derecha">↻</button></div>
+  </div>
+  <p class="hint" id="hint"><i></i><span id="hintTxt">Arrastra para girar la maqueta · toca un punto para entrar</span></p>
+
+  <div class="loading" id="loading" role="status"><span>Preparando el apartamento…</span></div>
+  <p class="error" id="error" role="alert" hidden>No se pudo iniciar la vista 3D. Prueba con un navegador que tenga aceleración gráfica activada.</p>
+</div>
+<script src="dist/datos.js"></script>
+<script src="dist/app.js"></script>
+</body>
+</html>

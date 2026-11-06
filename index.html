@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ora AI — Explorador de torres</title>
+  <meta name="description" content="Demo interactivo: explora la torre piso por piso y entra a la residencia.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#050a14">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="is-ext">
+<div id="app">
+
+  <header class="bar" id="bar">
+    <a class="brand" href="#" id="brand" aria-label="Ora AI">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.4">
+          <rect x="1.5" y="1.5" width="21" height="21"/>
+          <circle cx="12" cy="12" r="5.2"/>
+          <path d="M12 3.6v3M12 17.4v3" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span class="brand-name" data-brand="name">ORA AI</span>
+      <span class="brand-sep"></span>
+      <span class="brand-tag" data-brand="tag">Explorador de torres</span>
+    </a>
+    <button type="button" class="menu-toggle" id="menuToggle" aria-label="Menú" aria-expanded="false" aria-controls="nav">Menú</button>
+    <nav class="nav" id="nav" aria-label="Secciones">
+      <button type="button" data-mode="res" class="on">Residencias</button>
+      <button type="button" data-mode="pent">Penthouses</button>
+      <button type="button" data-mode="amen">Amenidades</button>
+    </nav>
+    <a class="cta" id="cta" href="#">Tour privado</a>
+  </header>
+
+  <!-- ===================== EXTERIOR ===================== -->
+  <section id="ext" class="view on" aria-label="Fachada">
+    <div id="viewport">
+      <div id="stage">
+        <div class="ext-top" id="top-day"><img src="img/day.webp" alt="" draggable="false"></div>
+        <div class="ext-top" id="top-night"><img src="img/night.webp" alt="" draggable="false"></div>
+        <img id="img-day"  class="bg" src="img/day.webp"   width="1672" height="941" alt="Torres al atardecer" draggable="false">
+        <img id="img-night" class="bg" src="img/night.webp" width="1672" height="941" alt="Torres de noche"      draggable="false">
+        <svg id="hot" viewBox="0 0 1672 941" aria-hidden="false"></svg>
+      </div>
+    </div>
+
+    <div class="flash" id="flash"></div>
+
+    <div class="hud" id="hud">
+      <div class="dot" id="dot"></div>
+      <div class="tip-line" id="tipLine"></div>
+      <button type="button" class="tip" id="tip" aria-live="polite"></button>
+      <div class="hint" id="hint"><i></i><span id="hintTxt"></span></div>
+      <div class="tod" id="tod" role="group" aria-label="Momento del día">
+        <button type="button" data-tod="day" class="on"><svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="3"/><path d="M8 1.5v1.8M8 12.7v1.8M1.5 8h1.8M12.7 8h1.8M3.4 3.4l1.3 1.3M11.3 11.3l1.3 1.3M12.6 3.4l-1.3 1.3M4.7 11.3l-1.3 1.3" stroke-linecap="round"/></svg>Atardecer</button>
+        <button type="button" data-tod="night"><svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M13 9.6A5.6 5.6 0 0 1 6.4 3a5.6 5.6 0 1 0 6.6 6.6Z" stroke-linejoin="round"/></svg>Noche</button>
+      </div>
+      <div class="legal" id="legal"></div>
+    </div>
+  </section>
+
+  <!-- ===================== INTERIOR ===================== -->
+  <section id="int" class="view" aria-label="Interior">
+    <div class="vwrap" id="vwrap">
+      <video id="vid" muted playsinline preload="none" disablepictureinpicture></video>
+      <canvas id="snap"></canvas>
+    </div>
+    <div class="vshade"></div>
+    <div id="mediaLoading" class="media-loading" role="status" hidden>
+      <span>Cargando recorrido…</span>
+    </div>
+
+    <button type="button" class="back" id="back"><span aria-hidden="true">←</span><span id="backTxt">Volver a la torre</span></button>
+
+    <div class="cap" id="cap">
+      <div class="cap-k" id="capK"></div>
+      <h2 class="cap-t" id="capT"></h2>
+    </div>
+    <div class="chips" id="chips" role="tablist"></div>
+
+    <aside class="panel" id="panel" aria-label="Residencia">
+      <div class="p-k" id="pK"></div>
+      <h2 class="p-t" id="pT"></h2>
+      <button type="button" class="panel-toggle" id="panelToggle" aria-expanded="false" aria-controls="panelDetails" aria-label="Ver detalles">Detalles</button>
+      <div id="panelDetails">
+      <dl class="p-meta">
+        <div><dt>Habitaciones</dt><dd id="pBeds"></dd></div>
+        <div><dt>Baños</dt><dd id="pBaths"></dd></div>
+        <div><dt>m²</dt><dd id="pArea"></dd></div>
+      </dl>
+      <p class="p-desc" id="pDesc"></p>
+      <ul class="p-rooms" id="pRooms"></ul>
+      </div>
+      <div class="p-cta">
+        <button type="button" class="btn ghost" id="pBack">Volver a la torre</button>
+        <a class="btn solid" id="pPlan" href="#">Solicitar plano</a>
+      </div>
+    </aside>
+  </section>
+
+  <p id="mediaStatus" class="media-status" role="status" hidden></p>
+
+  <!-- capa de transición (se rellena por JS) -->
+  <div id="fx" aria-hidden="true"></div>
+</div>
+
+<script src="js/vendor/gsap.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

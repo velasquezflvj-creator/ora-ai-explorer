@@ -1,0 +1,32 @@
+{
+ "id": "balcon",
+ "nombre": "Balcón",
+ "estado": "propuesta",
+ "verificado": false,
+ "fuente": "Propuesta de diseño solicitada el 5 de noviembre de 2026. No figura en los planos DWG del proyecto.",
+ "criterio": "Voladizo exterior sobre la fachada de la sala: no reduce ni modifica ningún espacio interior.",
+ "fachada": "sur (inferior en planta), frente a la sala",
+ "unidades": "metros, coordenadas locales de geometria-104.json (x este, y norte; y < 0 es exterior)",
+ "area_util_m2": 4.01,
+ "ancho_util": 2.475,
+ "fondo_util": 1.62,
+ "rect_util": [0.15, -1.62, 2.625, 0.0],
+ "losa": {"rect": [0.10, -1.70, 2.675, 0.0], "espesor": 0.15, "desnivel": 0.03},
+ "baranda": {"altura": 1.05, "tipo": "vidrio templado con pasamanos metálico"},
+ "acceso": {
+  "tipo": "puerta-ventana corrediza de dos hojas en el vano existente de la ventana de la sala (2,475 m)",
+  "vano": [0.15, 0.0, 2.625, 0.15],
+  "altura": 2.10,
+  "paso_libre": [0.15, 1.35],
+  "hojas_cerradas": [1.35, 2.625]
+ },
+ "cambios_sobre_planos": [
+  "Se elimina el antepecho de la ventana de la sala y el vano pasa a ser puerta-ventana.",
+  "Se agrega una losa en voladizo de 2,575 × 1,70 m con baranda de 1,05 m."
+ ],
+ "requiere_validacion": [
+  "Diseño estructural del voladizo (cálculo y refuerzo de la losa).",
+  "Viabilidad urbanística y modificación de la licencia de construcción.",
+  "Aprobación del arquitecto del proyecto (fachada, privacidad con el apartamento vecino y desagüe)."
+ ]
+}
