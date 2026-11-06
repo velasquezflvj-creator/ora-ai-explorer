@@ -116,6 +116,33 @@ Datos: `dist/datos.js` 15,6 MB (V1) → `dist/recorrido-datos.js` 20,5 MB (V2: +
 Memoria JS ≈ 100–140 MB. Llamadas de dibujo en el V1, perfil Media caminando: 99–174 por cuadro, 0,2–0,5 M
 triángulos (con el compositor activo three.js no informa las llamadas por cuadro).
 
+## Recorrido cinematográfico (Blender)
+
+- `blender/Apartamento_102_Video.blend` (copia del V3; el V3 y el Master no cambian), cámara `CAM_Video` con
+  **9 tomas, 53 s a 24 fps (1272 cuadros)**: entrada, cocina, sala y barra, balcón propuesto, habitación 2, baño
+  social, habitación principal, baño principal y cierre hacia el balcón. Cada toma une dos nudos consecutivos del
+  recorrido del visor (validado para no cruzar muros, muebles ni hojas de puerta); movimiento lento con entrada y
+  salida suaves, corte seco entre tomas, marcadores con el nombre de cada toma y el sello de propuesta conceptual.
+- En el video la vista directa por las ventanas se desenfoca y sobreexpone: el HDRI de Poly Haven muestra
+  edificios que podrían tomarse por el entorno real del proyecto.
+- **Estimación medida (2 cuadros de muestra, Cycles 1920×1080, 128 muestras adaptativas + OIDN, M2):
+  ≈ 290 s por cuadro → ≈ 103 horas** para el video completo. No se lanzó: el costo es excesivo para el M2.
+  Cuadros de muestra en `blender/render/video_muestras/`.
+- **Vista previa:** `blender/render/Apartamento_102_Recorrido_previa_640x360.mp4` (H.264, 640×360, 53 s, 12 fps,
+  EEVEE con 4 muestras; 13 min de render). Sirve para revisar **movimientos, encuadres y ritmo**, no el color:
+  sin sondas de irradiancia horneadas, EEVEE toma casi toda la luz indirecta del cielo y el interior sale frío y
+  azulado, y EEVEE avisa que el búfer de sombras (2048) se llena (pueden faltar sombras).
+- **Opciones para el render final (medidas en el M2):**
+
+  | Opción | Tiempo por cuadro | Total (1272 cuadros) | Calidad |
+  | --- | --- | --- | --- |
+  | Cycles 1920×1080, 128 muestras + OIDN | ≈ 290 s | ≈ 103 h | la del V3 |
+  | EEVEE 1920×1080, 64 muestras | ≈ 48 s | ≈ 17 h | requiere hornear sondas de irradiancia, subir el búfer de sombras y recalibrar el color antes |
+  | Cycles 1280×720, 64 muestras + OIDN (estimado, no medido) | ≈ 65 s | ≈ 23 h | cercana al V3, menos detalle |
+
+  Recomendación: calibrar EEVEE (sondas de irradiancia y de reflexión, búfer de sombras de 4096 MB) y validar
+  10 cuadros contra el V3 antes de comprometer ~17 h; o renderizar con Cycles en una GPU dedicada o en la nube.
+
 ## Limitaciones y siguiente fase
 
 Pendiente o fuera de alcance en esta fase:
