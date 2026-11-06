@@ -85,10 +85,50 @@ y luz rebotada exacta (las sondas son una aproximación por espacio, sin paralaj
 como fuente de luz, cáusticas del vidrio, y el desenfoque del exterior. El V3 sigue siendo la referencia para
 imágenes fijas.
 
-## Pruebas y rendimiento
+## Resultados de pruebas (ejecutadas el 2026-11-06 en este Mac M2)
 
-Ver la sección «Resultados» al final (se completó al cerrar la sesión con los valores medidos).
+| Prueba | Resultado |
+| --- | --- |
+| `tests/apartamento-102.test.cjs` (V1, antes de cambiar nada) | **14/14** (3 min 14 s) |
+| `tests/recorrido-102.test.cjs` (V2, nueva) | **5/5** ejecutada sola (V1 y modelo idénticos al commit base; sondas y texturas; inicio en la entrada, botón Entrada y cambio de sonda; colisiones con todos los muros y el acceso; teléfono: perfil Móvil automático y joystick) |
+| `npm test` completo (91 pruebas) | 56 pasan. **33 no se pueden ejecutar en esta copia**: `responsive.test.cjs` y `visual-fidelity.test.cjs` comparan el explorador de torres con `git archive origin/main` y con el commit `3703753` del repositorio original, que esta descarga no trae. Son del explorador, que el V2 no toca. **2 fallaron por saturación** (el V2 corriendo en paralelo con todas las demás y con Blender renderizando); repetidas solas pasan (fila anterior). |
+| Compilación | `node apartamento-102/tools/build_recorrido.mjs` sin errores (three 0.180.0, esbuild 0.25.10). |
+| Modelos | Los dos visores cargan el GLB, los muebles y las 10 sondas sin errores de consola (pruebas y capturas). |
+| Arquitectura | Sin cambios: prueba contra el commit base; en Blender, la huella de vértices y transformaciones de los 74 objetos originales coincide antes y después del V3. |
 
-## Pendientes y recomendaciones
+No verificado aún: Safari (solo se probó Chromium), teléfonos y tabletas físicos (solo emulación de Playwright),
+GPU dedicadas (el perfil Alta solo se midió en el M2, donde no corresponde usarlo).
 
-Ver la sección «Limitaciones y siguiente fase» al final.
+## Rendimiento medido
+
+`tools/medir_rendimiento.mjs`, Chromium con GPU Metal (Apple M2), ventana 1440×900 a 2× (Retina), 5 s girando
+caminando en cada espacio. Mediciones consecutivas en las mismas condiciones (la carga de la máquina varía entre
+corridas: comparar solo dentro de la misma fila).
+
+| Perfil | V1 caminar (sala / principal) | V2 caminar (sala / principal) | Notas |
+| --- | --- | --- | --- |
+| Móvil («baja») | 74 / 69 fps | 87 / 83 fps | sin posproceso ni espejos reales |
+| Media | 42 / 38 fps | 41 / 50 fps | el V2 añade GTAO y sondas y baja la densidad a 1× |
+| Alta | 11 / 5 fps | 11 / 5 fps | GTAO + MSAA 4× a 2×: no apto para el M2; el V2 ya no lo elige solo en GPU integradas |
+
+Carga hasta «listo» (servidor local, sin caché de disco frío): V1 ≈ 0,9–2,5 s, V2 ≈ 1,4–2 s.
+Datos: `dist/datos.js` 15,6 MB (V1) → `dist/recorrido-datos.js` 20,5 MB (V2: +4,9 MB de fotos y sondas).
+Memoria JS ≈ 100–140 MB. Llamadas de dibujo en el V1, perfil Media caminando: 99–174 por cuadro, 0,2–0,5 M
+triángulos (con el compositor activo three.js no informa las llamadas por cuadro).
+
+## Limitaciones y siguiente fase
+
+Pendiente o fuera de alcance en esta fase:
+- **Peso de carga:** 20 MB en base64 dentro de un `.js`. Para publicar: texturas KTX2 (Basis), sondas en PNG
+  RGBM o KTX2, y carga diferida por espacio en lugar de todo al inicio. Hoy en móvil la descarga es la principal
+  barrera.
+- **Luz de sondas sin paralaje** (reflejos aproximados en espacios grandes) y sin variante de atardecer (se
+  atenúan). Siguiente paso: hornear lightmaps de iluminación indirecta en Blender (requiere un segundo juego de
+  UV en el GLB; no se hizo para no regenerar el modelo).
+- **Doble mantenimiento:** `src/app-recorrido.mjs` es una copia de `src/app.mjs`. Si el V2 se aprueba, conviene
+  convertir sus diferencias en opciones del visor original o reemplazarlo, y mover `VIEWS`, `LIGHTS`, `POIS` y el
+  recorrido a un JSON por apartamento (ver `docs/pipeline-apartamentos.md`).
+- **Geometría** (necesita autorización): biseles, textiles con caída, decoración, árboles y entorno; la butaca de
+  la sala sale verde oscuro en Blender porque el tinte multiplica su textura original verde.
+- **Perfil Alta:** no se pudo medir en una GPU dedicada.
+- **Pruebas del explorador** que dependen del historial original de GitHub: ejecutarlas en el repositorio real.
