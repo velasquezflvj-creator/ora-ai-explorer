@@ -391,9 +391,10 @@ function buildContexto() {
   plano(x1 - x0, y1 - y0, c.clone().setY(alto), [Math.PI / 2, 0, 0]);                   // cielo
   plano(x1 - x0, alto, toScene((x0 + x1) / 2, y1, alto / 2), [0, 0, 0]);                 // fondo
   // losa superior solo para sombras: el cielo raso del GLB no proyecta sombra y el sol entraba «por el techo» en
-  // espacios sin ventana (baños, hall). Invisible; cubre solo la huella interior (no el balcón propuesto).
-  const losa = new THREE.Mesh(new THREE.BoxGeometry(W, 0.12, H), new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: false }));
-  losa.position.copy(toScene(W / 2, H / 2, 2.48)); losa.castShadow = true; losa.receiveShadow = false; losa.name = 'CTX_losa_sombra';
+  // espacios sin ventana (baños, hall). Invisible; cubre la huella interior y el corredor neutro (no el balcón propuesto).
+  // (también sobre el volumen del corredor, para que el sol no lo tiña a través de la puerta de acceso)
+  const losa = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0, 0.12, y1), new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: false }));
+  losa.position.copy(toScene((x0 + x1) / 2, y1 / 2, 2.48)); losa.castShadow = true; losa.receiveShadow = false; losa.name = 'CTX_losa_sombra';
   contexto.add(losa);
   scene.add(contexto);
 }
