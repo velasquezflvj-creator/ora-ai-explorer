@@ -190,7 +190,9 @@ def renderizar_sondas():
         cd.cycles.panorama_type = 'EQUIRECTANGULAR'
     cam = bpy.data.objects.new('_sonda', cd); sc.collection.objects.link(cam); sc.camera = cam
     meta_path = os.path.join(DEST, 'sondas', 'sondas.json')
-    meta = json.load(open(meta_path))['sondas'] if (SOLO_SONDAS and os.path.exists(meta_path)) else {}
+    previo = json.load(open(meta_path)) if os.path.exists(meta_path) else {}
+    meta = previo.get('sondas', {}) if SOLO_SONDAS else {}
+    graduadas = previo.get('gradacion_aplicada', {}) if SOLO_SONDAS else {}
     for nombre, (x, y, z) in s['puntos'].items():
         if SOLO_SONDAS and nombre not in SOLO_SONDAS:
             continue
@@ -202,9 +204,45 @@ def renderizar_sondas():
         r.filepath = out
         bpy.ops.render.render(write_still=True, scene=sc.name)
         meta[nombre] = {'plano': [x, y, z], 'archivo': f'{nombre}.hdr', 'espacio': s.get('espacios', {}).get(nombre, nombre)}
+        graduadas.pop(nombre, None)   # recién renderizada: aún sin gradación
         print(f'[web] sonda {nombre} en plano ({x}, {y}, {z})')
-    json.dump({'px': s['px'], 'muestras': s.get('muestras', 96), 'convencion': 'centro = +X Blender (este); arriba = +Z', 'sondas': meta},
+    json.dump({'px': s['px'], 'muestras': s.get('muestras', 96), 'convencion': 'centro = +X Blender (este); arriba = +Z', 'sondas': meta, 'gradacion_aplicada': graduadas},
               open(os.path.join(DEST, 'sondas', 'sondas.json'), 'w'), indent=1, ensure_ascii=False)
+
+
+# ------------------------------------------------------------------ 4. gradación de las sondas (como el render V3)
+def kelvin_rgb(k):
+    """Color de un cuerpo negro en sRGB lineal (aproximación de Tanner Helland), normalizado a G = 1."""
+    t = k / 100.0
+    r = 255 if t <= 66 else 329.698727446 * (t - 60) ** -0.1332047592
+    g = 99.4708025861 * math.log(t) - 161.1195681661 if t <= 66 else 288.1221695283 * (t - 60) ** -0.0755148492
+    b = 255 if t >= 66 else (0 if t <= 19 else 138.5177312231 * math.log(t - 10) - 305.0447927307)
+    c = a_lineal(np.clip(np.array([r, g, b], np.float32) / 255, 0, 1))
+    return c / c[1]
+
+
+def ajustar_sondas():
+    """Aplica a los HDR de las sondas la exposición y el balance de blancos del render V3 (que Blender aplica solo
+    en la vista), para que la luz que reciben los materiales en la web tenga el mismo nivel y la misma neutralidad."""
+    meta_path = os.path.join(DEST, 'sondas', 'sondas.json'); meta = json.load(open(meta_path))
+    aj = CFG['sondas'].get('gradacion', {'exposicion_ev': 0.8, 'balance_k': 5000})
+    previos = meta.get('gradacion_aplicada', {})
+    for nombre, s in meta['sondas'].items():
+        if previos.get(nombre) == aj:
+            continue
+        ruta = os.path.join(DEST, 'sondas', s['archivo'])
+        im = bpy.data.images.load(ruta); w, h = im.size
+        a = np.array(im.pixels[:], np.float32).reshape(h, w, 4)
+        ganancia = (2 ** aj['exposicion_ev']) / kelvin_rgb(aj['balance_k'])     # blanco de balance_k → neutro
+        ganancia = ganancia / ganancia[1] * (2 ** aj['exposicion_ev'])
+        a[..., :3] *= ganancia
+        out = bpy.data.images.new('_sonda', w, h, alpha=False, float_buffer=True); out.pixels[:] = a.ravel()
+        out.filepath_raw = ruta; out.file_format = 'HDR'; out.save()
+        bpy.data.images.remove(out); bpy.data.images.remove(im)
+        previos[nombre] = aj
+        print(f'[web] sonda {nombre}: +{aj["exposicion_ev"]} EV, balance {aj["balance_k"]} K, ganancia {np.round(ganancia, 3).tolist()}')
+    meta['gradacion_aplicada'] = previos
+    json.dump(meta, open(meta_path, 'w'), indent=1, ensure_ascii=False)
 
 
 escala_path = os.path.join(DEST, 'texturas', 'escala.json')
@@ -213,4 +251,5 @@ if 'texturas' in SOLO: escala.update(exportar_texturas())
 if 'piso' in SOLO: escala.update(hornear_piso())
 json.dump(escala, open(escala_path, 'w'), indent=1)
 if 'sondas' in SOLO: renderizar_sondas()
+if 'sondas' in SOLO or 'gradacion' in SOLO: ajustar_sondas()
 print('[web] listo:', DEST)
