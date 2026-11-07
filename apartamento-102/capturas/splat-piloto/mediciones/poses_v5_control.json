@@ -1,0 +1,81 @@
+{
+ "ruta": "/apartamento-102/recorrido-v5.html",
+ "calidad": "alta",
+ "viewport": [
+  1280,
+  720
+ ],
+ "informe": [
+  {
+   "id": "c01_sala_sofa",
+   "archivo": "../ora-splat-paquete/referencia_v5/c01_sala_sofa.png",
+   "error_posicion_mm": 0,
+   "error_direccion_grados": 0,
+   "fov_horizontal": 75
+  },
+  {
+   "id": "c02_sala_lateral",
+   "archivo": "../ora-splat-paquete/referencia_v5/c02_sala_lateral.png",
+   "error_posicion_mm": 0,
+   "error_direccion_grados": 0,
+   "fov_horizontal": 75
+  },
+  {
+   "id": "c03_sala_tv",
+   "archivo": "../ora-splat-paquete/referencia_v5/c03_sala_tv.png",
+   "error_posicion_mm": 0,
+   "error_direccion_grados": 0,
+   "fov_horizontal": 75
+  },
+  {
+   "id": "c04_sala_a_cocina",
+   "archivo": "../ora-splat-paquete/referencia_v5/c04_sala_a_cocina.png",
+   "error_posicion_mm": 0,
+   "error_direccion_grados": 0,
+   "fov_horizontal": 75
+  },
+  {
+   "id": "c05_barra",
+   "archivo": "../ora-splat-paquete/referencia_v5/c05_barra.png",
+   "error_posicion_mm": 0,
+   "error_direccion_grados": 0,
+   "fov_horizontal": 75
+  },
+  {
+   "id": "c06_cocina",
+   "archivo": "../ora-splat-paquete/referencia_v5/c06_cocina.png",
+   "error_posicion_mm": 0,
+   "error_direccion_grados": 0,
+   "fov_horizontal": 75
+  },
+  {
+   "id": "c07_meson_estufa",
+   "archivo": "../ora-splat-paquete/referencia_v5/c07_meson_estufa.png",
+   "error_posicion_mm": 0,
+   "error_direccion_grados": 0,
+   "fov_horizontal": 75
+  },
+  {
+   "id": "c08_despensa_barra",
+   "archivo": "../ora-splat-paquete/referencia_v5/c08_despensa_barra.png",
+   "error_posicion_mm": 0,
+   "error_direccion_grados": 0,
+   "fov_horizontal": 75
+  },
+  {
+   "id": "c09_entrada",
+   "archivo": "../ora-splat-paquete/referencia_v5/c09_entrada.png",
+   "error_posicion_mm": 0,
+   "error_direccion_grados": 0,
+   "fov_horizontal": 75
+  },
+  {
+   "id": "c10_social_v3",
+   "archivo": "../ora-splat-paquete/referencia_v5/c10_social_v3.png",
+   "error_posicion_mm": 0,
+   "error_direccion_grados": 0,
+   "fov_horizontal": 75
+  }
+ ],
+ "errores": []
+}

@@ -1,0 +1,6 @@
+{
+  "name": "ora-splat-visor",
+  "private": true,
+  "description": "Dependencias solo de compilación del visor del piloto de Gaussian Splatting (se empaquetan con esbuild). three se toma de la raíz.",
+  "dependencies": { "@sparkjsdev/spark": "2.4.0" }
+}

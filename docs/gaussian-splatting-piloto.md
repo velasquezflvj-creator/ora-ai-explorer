@@ -1,6 +1,7 @@
 # Piloto de Gaussian Splatting · sala, comedor y cocina del apartamento 102
 
-**Estado: diseñado y preparado; no ejecutado.** El render de las vistas y el entrenamiento son tareas pesadas que, en
+**Estado: diseñado y preparado; no ejecutado.** Propuesta ejecutable para GPU en la nube, con proveedores, presupuesto,
+pruebas de aceptación y detención: [gaussian-splatting-nube.md](gaussian-splatting-nube.md). El render de las vistas y el entrenamiento son tareas pesadas que, en
 este MacBook Air M2 de 8 GB, no se lanzaron sin autorización (ver «Recursos»). No se contrató ningún servicio.
 
 ## Qué es y por qué se evalúa

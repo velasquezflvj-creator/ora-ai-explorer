@@ -1,0 +1,91 @@
+{
+ "splat": "modelo/web/splat/sintetico_3M.ply",
+ "viewport": "1440x900@2",
+ "fecha": "2026-11-07T11:24:45.814Z",
+ "casos": [
+  {
+   "pagina": "recorrido-v5.html",
+   "calidad": "media",
+   "t_listo_ms": 2016,
+   "v5": {
+    "fps": 52,
+    "p95_ms": 33.3,
+    "peor_ms": 33.4,
+    "densidad": 1.5,
+    "heap_mb": 364
+   },
+   "errores": []
+  },
+  {
+   "pagina": "recorrido-splat.html",
+   "calidad": "media",
+   "t_listo_ms": 1835,
+   "t_splat_ms": 3117,
+   "splat": {
+    "cargado": true,
+    "error": null,
+    "activo": true,
+    "gaussianas": 3000000,
+    "ms_carga": 1239,
+    "bytes": 168000363
+   },
+   "modo_splat": {
+    "fps": 6.8,
+    "p95_ms": 548.5,
+    "peor_ms": 617.5,
+    "densidad": 1.5,
+    "heap_mb": 624
+   },
+   "modo_malla": {
+    "fps": 60,
+    "p95_ms": 16.8,
+    "peor_ms": 18.6,
+    "densidad": 1.25,
+    "heap_mb": 624
+   },
+   "errores": []
+  },
+  {
+   "pagina": "recorrido-v5.html",
+   "calidad": "alta",
+   "t_listo_ms": 2007,
+   "v5": {
+    "fps": 32.6,
+    "p95_ms": 34.9,
+    "peor_ms": 66.6,
+    "densidad": 1.5,
+    "heap_mb": 364
+   },
+   "errores": []
+  },
+  {
+   "pagina": "recorrido-splat.html",
+   "calidad": "alta",
+   "t_listo_ms": 2147,
+   "t_splat_ms": 4435,
+   "splat": {
+    "cargado": true,
+    "error": null,
+    "activo": true,
+    "gaussianas": 3000000,
+    "ms_carga": 2015,
+    "bytes": 168000363
+   },
+   "modo_splat": {
+    "fps": 9.6,
+    "p95_ms": 283.4,
+    "peor_ms": 518.3,
+    "densidad": 1.5,
+    "heap_mb": 703
+   },
+   "modo_malla": {
+    "fps": 32.2,
+    "p95_ms": 35.4,
+    "peor_ms": 67.3,
+    "densidad": 1.5,
+    "heap_mb": 703
+   },
+   "errores": []
+  }
+ ]
+}

@@ -6,6 +6,12 @@
     # 2) renderizar (PESADO: horas en un Mac M2; ver docs/gaussian-splatting-piloto.md antes de lanzarlo)
     Blender -b blender/Apartamento_102_Render_V3.blend --python blender/scripts/camaras_splat.py -- \
         blender/scripts/apto-102.json blender/splat_sala_cocina --renderizar [--desde N --hasta M]
+    # 3) en la nube (paquete de tools/splat/preparar_paquete.sh): GPU NVIDIA con OptiX, muestras propias y las vistas
+    #    de control (no se entrenan; sirven de referencia para comparar V5 y splat desde las mismas poses)
+    blender -b escena/escena_splat.blend --python blender/scripts/camaras_splat.py -- \
+        blender/scripts/apto-102.json datos --renderizar --control --dispositivo OPTIX --muestras 128
+Opciones: --dispositivo METAL|OPTIX|CUDA|CPU (por defecto METAL si existe, si no OPTIX, CUDA o CPU),
+--muestras N, --control (renderiza también control/<id>.png y escribe control.json), --solo-control.
 
 Diseño: las cámaras recorren la zona navegable (piso libre de sala, comedor-barra y cocina, sin entrar en muebles) en
 una rejilla de ~0,45 m, a tres alturas (1,20 / 1,60 / 2,00 m), mirando en 8 direcciones con ligera inclinación hacia
@@ -22,6 +28,10 @@ CFG = json.load(open(argv[0])); DEST = os.path.abspath(argv[1]); os.makedirs(os.
 RENDER = '--renderizar' in argv
 DESDE = int(argv[argv.index('--desde') + 1]) if '--desde' in argv else 0
 HASTA = int(argv[argv.index('--hasta') + 1]) if '--hasta' in argv else 10 ** 9
+DISP = argv[argv.index('--dispositivo') + 1].upper() if '--dispositivo' in argv else None
+MUESTRAS = int(argv[argv.index('--muestras') + 1]) if '--muestras' in argv else None
+CONTROL = '--control' in argv or '--solo-control' in argv
+SOLO_CONTROL = '--solo-control' in argv
 SP = CFG.get('splat', {})
 ox, oy = CFG['origen_plano']
 sc = bpy.data.scenes[CFG['escena']]
@@ -73,17 +83,49 @@ json.dump({'camera_angle_x': cd.angle_x if hasattr(cd, 'angle_x') else cd.angle,
            'nota': 'Cámaras del piloto de Gaussian Splatting (sala y cocina). Ejes Blender: z arriba; matrices cámara→mundo (OpenGL: la cámara mira a −Z).',
            'frames': frames}, open(os.path.join(DEST, 'transforms.json'), 'w'), indent=1)
 print(f'[splat] {len(puntos)} puntos libres × {len(alturas)} alturas × {dirs} direcciones + {len(SP.get("detalles", []))} detalles = {len(frames)} vistas ({W}×{H})')
+# --- vistas de control (no entrenan): mismas poses que capturan la V5 y el splat en el navegador
+control = []
+for c in SP.get('control', {}).get('vistas', []):
+    (x, y, h), (lx, ly, lh) = c['desde'], c['hacia']
+    pos = Vector((x - ox, y - oy, h)); rot = (Vector((lx - ox, ly - oy, lh)) - pos).to_track_quat('-Z', 'Y').to_euler()
+    control.append({'id': c['id'], 'file_path': f"control/{c['id']}.png", 'desde': c['desde'], 'hacia': c['hacia'],
+                    'transform_matrix': [list(fila) for fila in Matrix.Translation(pos) @ rot.to_matrix().to_4x4()]})
+if control:
+    json.dump({'camera_angle_x': cd.angle_x, 'w': W, 'h': H, 'nota': 'Vistas de control (no entrenan). Mismas convenciones que transforms.json.',
+               'frames': control}, open(os.path.join(DEST, 'control.json'), 'w'), indent=1)
+
+
+def configurar_dispositivo():
+    sc.render.engine = 'CYCLES'; sc.cycles.samples = MUESTRAS or SP.get('muestras', 64); sc.cycles.use_denoising = True
+    sc.render.use_persistent_data = True   # no reconstruye la escena (BVH, texturas) en cada vista
+    cp = bpy.context.preferences.addons['cycles'].preferences
+    for tipo in ([DISP] if DISP else ['METAL', 'OPTIX', 'CUDA']):
+        if tipo == 'CPU': break
+        try:
+            cp.compute_device_type = tipo; cp.refresh_devices()
+            gpus = [d for d in cp.devices if d.type == tipo]
+            if not gpus: continue
+            for d in cp.devices: d.use = d.type == tipo
+            sc.cycles.device = 'GPU'
+            if tipo == 'OPTIX': sc.cycles.denoiser = 'OPTIX'
+            print(f'[splat] dispositivo {tipo}: {[d.name for d in gpus]}'); return tipo
+        except TypeError:
+            continue
+    if DISP and DISP != 'CPU': raise SystemExit(f'[splat] ERROR: no hay dispositivo {DISP}')
+    sc.cycles.device = 'CPU'; print('[splat] dispositivo CPU'); return 'CPU'
+
+
 if RENDER:
-    sc.render.engine = 'CYCLES'; sc.cycles.samples = SP.get('muestras', 64); sc.cycles.use_denoising = True
-    try:
-        cp = bpy.context.preferences.addons['cycles'].preferences; cp.compute_device_type = 'METAL'; cp.refresh_devices()
-        for dv in cp.devices: dv.use = dv.type == 'METAL'
-        sc.cycles.device = 'GPU'
-    except Exception: pass
-    for i, f in enumerate(frames):
-        if not (DESDE <= i < HASTA): continue
+    import time
+    disp = configurar_dispositivo()
+    os.makedirs(os.path.join(DEST, 'control'), exist_ok=True)
+    trabajo = [] if SOLO_CONTROL else [(i, f) for i, f in enumerate(frames) if DESDE <= i < HASTA]
+    if CONTROL: trabajo += [(None, f) for f in control]
+    t0, hechos, log = time.time(), 0, open(os.path.join(DEST, 'render_log.csv'), 'a')
+    for i, f in trabajo:
         ruta = os.path.join(DEST, f['file_path'])
         if os.path.exists(ruta): continue   # reanudable
         cam.matrix_world = Matrix(f['transform_matrix'])
-        r.filepath = ruta; bpy.ops.render.render(write_still=True, scene=sc.name)
-        print(f'[splat] {i + 1}/{len(frames)}')
+        r.filepath = ruta; t1 = time.time(); bpy.ops.render.render(write_still=True, scene=sc.name); hechos += 1
+        log.write(f"{f['file_path']},{disp},{sc.cycles.samples},{time.time() - t1:.2f}\n"); log.flush()
+        print(f"[splat] {f['file_path']} {time.time() - t1:.1f} s · {hechos}/{len(trabajo)} · media {(time.time() - t0) / hechos:.1f} s/vista")

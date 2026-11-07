@@ -944,6 +944,148 @@
         ]
       }
     ],
-    "nota": "Piloto de Gaussian Splatting de sala, comedor y cocina (espacio social). Ver docs/gaussian-splatting-piloto.md"
+    "nota": "Piloto de Gaussian Splatting de sala, comedor y cocina (espacio social). Ver docs/gaussian-splatting-piloto.md",
+    "control": {
+      "nota": "Vistas de control: NO se usan para entrenar. Cycles las renderiza como referencia y desde las mismas poses se capturan la V5 y el splat (plano local: x, y, altura; mira a lx, ly, lh). Altura de ojo del visor 1,6 m; FOV horizontal 75°.",
+      "vistas": [
+        {
+          "id": "c01_sala_sofa",
+          "desde": [
+            1.85,
+            0.85,
+            1.6
+          ],
+          "hacia": [
+            0.6,
+            3.5,
+            1.3
+          ]
+        },
+        {
+          "id": "c02_sala_lateral",
+          "desde": [
+            2.3,
+            1.75,
+            1.6
+          ],
+          "hacia": [
+            0.3,
+            2.0,
+            1.2
+          ]
+        },
+        {
+          "id": "c03_sala_tv",
+          "desde": [
+            1.9,
+            2.6,
+            1.6
+          ],
+          "hacia": [
+            2.55,
+            1.8,
+            1.3
+          ]
+        },
+        {
+          "id": "c04_sala_a_cocina",
+          "desde": [
+            2.3,
+            3.55,
+            1.6
+          ],
+          "hacia": [
+            1.0,
+            6.5,
+            1.3
+          ]
+        },
+        {
+          "id": "c05_barra",
+          "desde": [
+            1.4,
+            3.55,
+            1.6
+          ],
+          "hacia": [
+            0.7,
+            4.4,
+            1.0
+          ]
+        },
+        {
+          "id": "c06_cocina",
+          "desde": [
+            2.25,
+            4.9,
+            1.6
+          ],
+          "hacia": [
+            1.0,
+            7.2,
+            1.2
+          ]
+        },
+        {
+          "id": "c07_meson_estufa",
+          "desde": [
+            1.4,
+            6.3,
+            1.6
+          ],
+          "hacia": [
+            2.2,
+            7.3,
+            1.0
+          ]
+        },
+        {
+          "id": "c08_despensa_barra",
+          "desde": [
+            2.8,
+            6.3,
+            1.6
+          ],
+          "hacia": [
+            0.4,
+            5.6,
+            1.1
+          ]
+        },
+        {
+          "id": "c09_entrada",
+          "desde": [
+            0.95,
+            6.95,
+            1.6
+          ],
+          "hacia": [
+            1.25,
+            1.0,
+            1.45
+          ]
+        },
+        {
+          "id": "c10_social_v3",
+          "desde": [
+            2.1,
+            0.85,
+            1.6
+          ],
+          "hacia": [
+            1.0,
+            6.0,
+            1.45
+          ]
+        }
+      ]
+    },
+    "nube": {
+      "nota": "Ver docs/gaussian-splatting-nube.md",
+      "muestras_cycles": 128,
+      "iteraciones": 30000,
+      "presupuesto_max_usd": 15,
+      "limite_horas_gpu": 4
+    }
   }
 }

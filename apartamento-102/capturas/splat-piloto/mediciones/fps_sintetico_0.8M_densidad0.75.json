@@ -1,0 +1,49 @@
+{
+ "splat": "modelo/web/splat/sintetico_0.8M.ply&densidad=0.75",
+ "viewport": "1440x900@2",
+ "fecha": "2026-11-07T11:27:11.170Z",
+ "casos": [
+  {
+   "pagina": "recorrido-v5.html",
+   "calidad": "media",
+   "t_listo_ms": 1915,
+   "v5": {
+    "fps": 51.8,
+    "p95_ms": 33.3,
+    "peor_ms": 35.3,
+    "densidad": 1.5,
+    "heap_mb": 386
+   },
+   "errores": []
+  },
+  {
+   "pagina": "recorrido-splat.html",
+   "calidad": "media",
+   "t_listo_ms": 1855,
+   "t_splat_ms": 2465,
+   "splat": {
+    "cargado": true,
+    "error": null,
+    "activo": true,
+    "gaussianas": 800000,
+    "ms_carga": 581,
+    "bytes": 44800362
+   },
+   "modo_splat": {
+    "fps": 52.8,
+    "p95_ms": 33.3,
+    "peor_ms": 100,
+    "densidad": 0.75,
+    "heap_mb": 435
+   },
+   "modo_malla": {
+    "fps": 60,
+    "p95_ms": 17.6,
+    "peor_ms": 17.7,
+    "densidad": 0.75,
+    "heap_mb": 435
+   },
+   "errores": []
+  }
+ ]
+}

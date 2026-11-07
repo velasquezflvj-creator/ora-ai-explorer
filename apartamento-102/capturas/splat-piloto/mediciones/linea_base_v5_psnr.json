@@ -1,0 +1,5 @@
+{
+ "nota": "PSNR (dB) de la V5 frente a Cycles en las 10 vistas de control. Referencia PRELIMINAR: Cycles a 16 muestras en el M2 (la definitiva será a 128 muestras en la nube; LPIPS y SSIM se calculan allí con metricas.py).",
+ "psnr_v5": {"c01_sala_sofa": 22.54, "c02_sala_lateral": 23.14, "c03_sala_tv": 16.31, "c04_sala_a_cocina": 21.29, "c05_barra": 22.34, "c06_cocina": 20.76, "c07_meson_estufa": 22.05, "c08_despensa_barra": 20.29, "c09_entrada": 19.68, "c10_social_v3": 22.31},
+ "media": 21.07
+}

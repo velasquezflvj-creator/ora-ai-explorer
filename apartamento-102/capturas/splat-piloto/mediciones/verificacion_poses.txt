@@ -1,0 +1,1 @@
+RESULTADO {"diferencia_max_px": {"transforms.json": {"px": 0.0015, "puntos": 59836}, "control.json": {"px": 0.0007, "puntos": 2242}}}
