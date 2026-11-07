@@ -11,6 +11,7 @@ con otro apartamento sin reconstruir el sistema a mano. Es un procedimiento inte
 | 2. Escena de render | `blender/scripts/importar_apartamento.py` | GLB + `blender/scripts/apto-NNN.json` | `.blend` con muebles, materiales PBR, luces 4200 K, portales, cámara de prueba y advertencias |
 | 3. Recursos web | `blender/scripts/exportar_web.py` | `.blend` + JSON | `modelo/web/texturas/*.jpg` (claves del visor), piso horneado, `modelo/web/sondas/*.hdr` |
 | 3b. Luz horneada (V3) | `blender/scripts/hornear_planos_web.py` | `.blend` + JSON (`horneado`) | `modelo/web/horneado/piso_luz.hdr`, `cielo.hdr`, `horneado.json` (piso y cielo raso; sin tocar el GLB) |
+| 3c. Atlas de luz (V4) | `blender/scripts/hornear_lightmaps_web.py` (pasos `hornear` y `exportar`) | `.blend` + GLB original + JSON (`lightmaps`) | `modelo/web/v4/atlas_luz.hdr`, `apto-102-v4.glb` (copia con TEXCOORD_1), `lightmaps.json`; verificar con `tools/verificar_glb.mjs` |
 | 4. Visor | `apartamento-NNN/tools/build_recorrido.mjs` | GLB, planta, muebles, `modelo/web` | `dist/recorrido-app.js`, `dist/recorrido-datos.js` |
 | 5. Video | `blender/scripts/camara_video.py` | `.blend` + JSON (`video.tomas`) | `.blend` de video, vista previa MP4 y estimación del render final |
 | 6. Control | `tests/*.test.cjs`, `tools/medir_rendimiento.mjs`, `tools/capturar_vistas.mjs` | servidor local | pruebas, fps por perfil, capturas comparables con Blender |

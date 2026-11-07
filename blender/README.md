@@ -21,6 +21,10 @@ B="/Applications/Blender.app/Contents/MacOS/Blender"   # o la ruta de Blender 5.
 "$B" -b blender/Apartamento_102_Render_V3.blend --python blender/scripts/exportar_web.py -- blender/scripts/apto-102.json apartamento-102/modelo/web
 # luz horneada del piso y del cielo raso para el recorrido V3 (no guarda el .blend de entrada)
 "$B" -b blender/Apartamento_102_Render_V3.blend --python blender/scripts/hornear_planos_web.py -- blender/scripts/apto-102.json apartamento-102/modelo/web/horneado
+# atlas de luz de las superficies fijas + copia del GLB con UV de luz (recorrido V4)
+"$B" -b blender/Apartamento_102_Render_V3.blend --python blender/scripts/hornear_lightmaps_web.py -- hornear blender/scripts/apto-102.json apartamento-102/modelo/web/v4
+"$B" -b --factory-startup --python blender/scripts/hornear_lightmaps_web.py -- exportar blender/scripts/apto-102.json apartamento-102/modelo/web/v4
+node apartamento-102/tools/verificar_glb.mjs apartamento-102/modelo/apto-102-propuesta.glb apartamento-102/modelo/web/v4/apto-102-v4.glb
 # recorrido cinematográfico: estimación del render final y vista previa EEVEE
 "$B" -b blender/Apartamento_102_Render_V3.blend --python blender/scripts/camara_video.py -- blender/scripts/apto-102.json blender/Apartamento_102_Video.blend --estimar 3
 "$B" -b blender/Apartamento_102_Video.blend --python blender/scripts/camara_video.py -- blender/scripts/apto-102.json blender/Apartamento_102_Video.blend --vista-previa blender/render/Apartamento_102_Recorrido_previa_640x360.mp4

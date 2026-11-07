@@ -1,0 +1,32 @@
+✔ programa: 2 habitaciones amplias, 2 baños, sin estudio (218.311042ms)
+✔ la envolvente, los vanos de fachada, el acceso y los ductos son los del DWG (0.502167ms)
+✔ el GLB separa envolvente del DWG, propuesta e ilustrativo (0.677041ms)
+✔ con el mobiliario puesto se llega caminando a todos los espacios y al balcón (85.298209ms)
+✔ ingreso: pasa un ancho libre de 0,90 m entre la despensa y el mesón hasta la cocina (9.683166ms)
+✔ modelo 3D: el ingreso mide al menos 0,90 m entre la despensa y el mesón, y los muebles detallados cargan (20396.388291ms)
+✔ presentación: texturas PBR propias, exterior con HDRI y árboles 3D, día/atardecer, calidad y puerta oculta de ropas (33983.333208ms)
+✔ el visor rotula la propuesta y ofrece espacios, puntos y leyenda (9974.465167ms)
+✔ «Solo envolvente del DWG» oculta la propuesta y dibuja la planta original (12063.679791ms)
+✔ caminar: colisiones con tabiques, mobiliario y hojas de puerta de la propuesta (33082.216667ms)
+✔ la trayectoria del recorrido no atraviesa muros, muebles, hojas ni baranda (9871.365334ms)
+✔ recorrido de 12 capítulos: visita todos los espacios, se pausa y se explora desde ahí (24957.169375ms)
+✔ acabados y responsive en teléfono (9366.503417ms)
+✔ abre desde el archivo (sin servidor) (9491.519625ms)
+✔ la V4 no modifica V1, V2, V3 ni el modelo original (254.262875ms)
+✔ carga con sondas de luz, texturas fotográficas y rótulos de propuesta (19350.140875ms)
+✔ caminar empieza en la entrada; «Entrada» vuelve al inicio; la sonda sigue al visitante (70457.584708ms)
+✔ colisiones: no atraviesa muros ni sale por el acceso (37374.699833ms)
+✔ teléfono: perfil Móvil automático y joystick táctil (27520.175041ms)
+✔ luz horneada de día en piso y cielo raso; se apaga al atardecer y en la vista técnica (16174.754291ms)
+✔ sol del render V3, focos dirigidos, sombras estáticas y densidad dentro del rango del perfil (16052.027875ms)
+✔ GLB derivado: misma arquitectura que el original (nodos, metadatos, materiales y posiciones) (191.9695ms)
+✔ atlas de luz en muros y superficies fijas; vidrios, espejos y emisivos quedan en tiempo real (16027.395333ms)
+✔ caminar: acelera y frena suave, no atraviesa muros (42070.294583ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 409627.801

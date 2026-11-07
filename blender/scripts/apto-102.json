@@ -791,5 +791,16 @@
       0.56
     ],
     "nota": "Piso y cielo raso: ARQ_Piso_* a z=0 y ARQ_Cielo/ILU_Cielo_detalles a z=2,3-2,4 dentro de x,y en [-4,4] m (Blender)"
+  },
+  "lightmaps": {
+    "px": 4096,
+    "muestras": 256,
+    "margen": 0.003,
+    "excluir_prefijos": [
+      "ARQ_Piso",
+      "ARQ_Cielo",
+      "ILU_Cielo_detalles"
+    ],
+    "nota": "Atlas único de irradiancia para las superficies fijas (muros, carpintería, aparatos, mobiliario propio). Piso y cielo raso usan los horneados planos de mayor resolución."
   }
 }
