@@ -47,7 +47,10 @@ test('el V2 no modifica el visor original ni el modelo', () => {
   assert.doesNotMatch(v1, /recorrido-(app|datos)/);
   // con Git: los archivos del V1, el modelo y los datos de planta son idénticos al commit base
   if (fs.existsSync(path.join(root, '.git'))) {
-    const base = execFileSync('git', ['rev-list', '--max-parents=0', 'HEAD'], { cwd: root }).toString().trim();
+    // referencia del V1: 478d2da = cierre de feat/apartamento-102-rediseno en GitHub (estado descargado);
+    // si no existe en este repositorio (copia local sin ese historial), el primer commit
+    let base; try { base = execFileSync('git', ['rev-parse', '--verify', '-q', '478d2da^{commit}'], { cwd: root }).toString().trim(); }
+    catch { base = execFileSync('git', ['rev-list', '--max-parents=0', 'HEAD'], { cwd: root }).toString().trim().split('\n').pop(); }
     const protegidos = ['apartamento-102/index.html', 'apartamento-102/src/app.mjs', 'apartamento-102/src/pbr102.mjs', 'apartamento-102/dist/app.js',
       'apartamento-102/dist/datos.js', 'apartamento-102/modelo/apto-102-propuesta.glb', 'apartamento-102/data/propuesta-102.json', 'apartamento-102/data/original-102-dwg.json'];
     const diff = execFileSync('git', ['diff', '--name-only', base, '--', ...protegidos], { cwd: root }).toString().trim();

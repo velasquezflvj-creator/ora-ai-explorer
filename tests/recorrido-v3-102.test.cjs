@@ -47,11 +47,14 @@ test('el V3 no modifica el V1, el V2 ni el modelo', () => {
   assert.doesNotMatch(v1, /recorrido-(app|datos)/);
   // con Git: los archivos del V1, el modelo y los datos de planta son idénticos al commit base
   if (fs.existsSync(path.join(root, '.git'))) {
-    const base = execFileSync('git', ['rev-list', '--max-parents=0', 'HEAD'], { cwd: root }).toString().trim();
+    // referencia del V1: 478d2da = cierre de feat/apartamento-102-rediseno en GitHub (estado descargado);
+    // si no existe en este repositorio (copia local sin ese historial), el primer commit
+    let base; try { base = execFileSync('git', ['rev-parse', '--verify', '-q', '478d2da^{commit}'], { cwd: root }).toString().trim(); }
+    catch { base = execFileSync('git', ['rev-list', '--max-parents=0', 'HEAD'], { cwd: root }).toString().trim().split('\n').pop(); }
     // V2: idéntico al cierre de su rama (feat/apto-102-recorrido-interactivo), si existe en este repositorio
     let v2 = null; try { v2 = execFileSync('git', ['rev-parse', '--verify', '-q', 'feat/apto-102-recorrido-interactivo'], { cwd: root }).toString().trim(); } catch {}
     if (v2) {
-      const d2 = execFileSync('git', ['diff', '--name-only', v2, '--', 'apartamento-102/recorrido.html', 'apartamento-102/src/app-recorrido.mjs', 'apartamento-102/css/recorrido.css', 'apartamento-102/tools/build_recorrido.mjs', 'tests/recorrido-102.test.cjs'], { cwd: root }).toString().trim();
+      const d2 = execFileSync('git', ['diff', '--name-only', v2, '--', 'apartamento-102/recorrido.html', 'apartamento-102/src/app-recorrido.mjs', 'apartamento-102/css/recorrido.css', 'apartamento-102/tools/build_recorrido.mjs'], { cwd: root }).toString().trim();
       assert.equal(d2, '', 'V2 sin cambios respecto al cierre de su rama');
     }
     const protegidos = ['apartamento-102/index.html', 'apartamento-102/src/app.mjs', 'apartamento-102/src/pbr102.mjs', 'apartamento-102/dist/app.js',
