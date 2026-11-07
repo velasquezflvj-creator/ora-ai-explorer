@@ -1,0 +1,29 @@
+{
+ "centro_blender": [
+  0.0,
+  0.0
+ ],
+ "lado_m": 8.0,
+ "px": 1024,
+ "muestras": 256,
+ "piso": {
+  "archivo": "piso_luz.hdr",
+  "tipo": "irradiancia (luz sin albedo)",
+  "albedo_usado": [
+   0.7,
+   0.64,
+   0.56
+  ],
+  "orientacion": "u = (x - cx)/lado + 0.5 ; v = (y - cy)/lado + 0.5 (v hacia el norte)"
+ },
+ "cielo": {
+  "archivo": "cielo.hdr",
+  "tipo": "apariencia final (Combined)",
+  "orientacion": "u = (x - cx)/lado + 0.5 ; v = (cy - y)/lado + 0.5 (v hacia el sur)"
+ },
+ "gradacion": {
+  "exposicion_ev": 0.8,
+  "balance_k": 5000
+ },
+ "coordenadas": "Blender: x este, y norte, z arriba (= plano local menos origen_plano)"
+}
