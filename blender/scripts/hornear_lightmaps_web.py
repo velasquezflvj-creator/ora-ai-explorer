@@ -21,6 +21,9 @@ import numpy as np
 
 argv = sys.argv[sys.argv.index('--') + 1:]
 PASO, CFG_PATH, DEST = argv[0], argv[1], os.path.abspath(argv[2])
+PILOTO = '--piloto' in argv   # V5: aplica blender/scripts/piloto_v5.py (fusión, biseles, decoración CC0) a la copia
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+NOMBRE_GLB = 'apto-102-v5.glb' if PILOTO else 'apto-102-v4.glb'
 CFG = json.load(open(CFG_PATH)); os.makedirs(DEST, exist_ok=True)
 ROOT = os.path.abspath(os.environ.get('ORA_ROOT') or os.path.join(os.path.dirname(CFG_PATH), '..', '..'))
 LM = CFG.get('lightmaps', {})
@@ -87,6 +90,14 @@ def hornear():
     if bpy.context.window: bpy.context.window.scene = sc
     col = bpy.data.collections[f"APTO_{CFG['apartamento']}_Modelo"]
     objs = objetos_horneables(col)
+    if PILOTO:
+        import piloto_v5
+        cfgp = dict(CFG['piloto']); cfgp['fusionar'] = [o.name for o in objs]
+        raiz = next((o for o in col.objects if o.parent is None and o.type == 'EMPTY'), None)
+        nuevos, res = piloto_v5.aplicar(cfgp, ROOT, col, raiz)
+        objs = objetos_horneables(col)
+        print(f"[lightmaps] piloto: {len(res['fusionados'])} fusionadas, {len(res['biselados'])} biseladas, {len(res['reemplazos'])} cerámicas, {len(res['utileria'])} utilería")
+        json.dump(res, open(os.path.join(DEST, 'piloto.json'), 'w'), indent=1, ensure_ascii=False, default=str)
     print(f'[lightmaps] {len(objs)} mallas a hornear')
     # --- UV «luz»: desplegado automático por objeto y empaquetado común (densidad uniforme)
     vl = bpy.context.view_layer
@@ -160,7 +171,7 @@ def hornear():
     json.dump({'atlas': 'atlas_luz.hdr', 'px': PX, 'muestras': MUESTRAS, 'cobertura_atlas': round(cobertura, 3),
                'objetos': sorted(o.name for o in objs), 'materiales': sorted(m.name for m in mats),
                'tipo': 'irradiancia difusa directa + indirecta (sin color del material)', 'gradacion': GRAD, 'reduccion_ruido': metodo,
-               'uv': 'TEXCOORD_1 del GLB derivado apto-102-v4.glb'}, open(os.path.join(DEST, 'lightmaps.json'), 'w'), indent=1, ensure_ascii=False)
+               'uv': f'TEXCOORD_1 del GLB derivado {NOMBRE_GLB}', 'piloto': PILOTO}, open(os.path.join(DEST, 'lightmaps.json'), 'w'), indent=1, ensure_ascii=False)
     print(f'[lightmaps] atlas guardado (cobertura {cobertura:.0%}); el .blend de entrada no se guarda')
 
 
@@ -170,6 +181,11 @@ def exportar():
     for o in list(bpy.data.objects): bpy.data.objects.remove(o)
     glb = os.path.join(ROOT, CFG['importar']['glb'])
     bpy.ops.import_scene.gltf(filepath=glb, import_shading='NORMALS', merge_vertices=False)
+    if PILOTO:
+        import piloto_v5
+        cfgp = dict(CFG['piloto']); cfgp['fusionar'] = [n for n in meta['objetos'] if not n.startswith('DEC_')]
+        raiz = next((o for o in bpy.data.objects if o.parent is None and o.type == 'EMPTY' and o.name.startswith('Apto_')), None)
+        piloto_v5.aplicar(cfgp, ROOT, bpy.context.scene.collection, raiz)
     faltan, ok = [], 0
     for nombre in meta['objetos']:
         o = bpy.data.objects.get(nombre)
@@ -181,10 +197,10 @@ def exportar():
         me.uv_layers.active_index = 0
         for i, l in enumerate(me.uv_layers): l.active_render = i == 0
     if faltan: raise SystemExit(f'[lightmaps] objetos no encontrados en el GLB original: {faltan}')
-    salida = os.path.join(DEST, 'apto-102-v4.glb')
+    salida = os.path.join(DEST, NOMBRE_GLB)
     kw = dict(filepath=salida, export_format='GLB', export_extras=True, export_yup=True, export_texcoords=True, export_normals=True,
               export_materials='EXPORT', export_cameras=False, export_lights=False, export_apply=False, export_animations=False)
-    try: bpy.ops.export_scene.gltf(**kw, export_image_format='NONE')
+    try: bpy.ops.export_scene.gltf(**kw, export_image_format='AUTO' if PILOTO else 'NONE')
     except TypeError: bpy.ops.export_scene.gltf(**kw)
     print(f'[lightmaps] {ok} mallas con UV «luz»; GLB derivado: {salida}')
 

@@ -1,0 +1,70 @@
+{
+ "fusionados": [
+  "ARQ_Muros",
+  "PRO_Muros_interiores",
+  "ARQ_Dinteles_Antepechos",
+  "ARQ_Losa",
+  "ILU_Ventaneria",
+  "ILU_Puerta_entrada",
+  "ILU_Puerta_habitacion_2",
+  "ILU_Puerta_principal",
+  "ILU_Puerta_bano_principal",
+  "ILU_Puerta_bano_social",
+  "ILU_Puerta_ropas",
+  "ILU_Marcos_puertas",
+  "ILU_Revestimientos",
+  "ILU_Guardaescobas",
+  "ILU_Luminarias",
+  "APA_Cocina",
+  "APA_Bano_principal",
+  "APA_Bano_social",
+  "APA_Ropas",
+  "MOB_Sala",
+  "MOB_Barra",
+  "MOB_Habitacion_2",
+  "MOB_Habitacion_principal",
+  "MOB_Vestier",
+  "MOB_Banos",
+  "PROP_Balcon_losa",
+  "PROP_Balcon_baranda",
+  "PROP_Puerta_ventana_sala",
+  "MOB_Balcon"
+ ],
+ "biselados": [
+  "APA_Cocina",
+  "MOB_Barra",
+  "MOB_Sala",
+  "ILU_Puerta_entrada"
+ ],
+ "reemplazos": [
+  {
+   "en": "MOB_Sala",
+   "modelo": "ceramic_vase_01",
+   "alto_m": 0.26
+  },
+  {
+   "en": "MOB_Barra",
+   "modelo": "ceramic_vase_04",
+   "alto_m": 0.26
+  },
+  {
+   "en": "APA_Cocina",
+   "modelo": "ceramic_vase_02",
+   "alto_m": 0.22
+  },
+  {
+   "en": "APA_Cocina",
+   "modelo": "ceramic_vase_01",
+   "alto_m": 0.17
+  },
+  {
+   "en": "APA_Cocina",
+   "modelo": "ceramic_vase_04",
+   "alto_m": 0.16
+  }
+ ],
+ "utileria": [
+  "wooden_cutting_board",
+  "food_pears_asian_01"
+ ]
+}

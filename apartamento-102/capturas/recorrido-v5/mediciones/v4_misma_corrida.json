@@ -1,0 +1,132 @@
+{
+ "ruta": "/apartamento-102/recorrido-v4.html",
+ "viewport": "1440x900@2",
+ "calidades": [
+  {
+   "calidad": "media",
+   "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+   "t_listo_ms": 1910,
+   "mediciones": [
+    {
+     "modo": "orbit",
+     "room": null,
+     "fps": 112.2,
+     "peor_ms": 25.6,
+     "calidad_final": "media",
+     "densidad": 1,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 182,
+     "texturasGPU": 59,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "walk",
+     "room": "social",
+     "fps": 89.5,
+     "peor_ms": 32.5,
+     "calidad_final": "media",
+     "densidad": 1,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 225,
+     "texturasGPU": 70,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "walk",
+     "room": "principal",
+     "fps": 90.4,
+     "peor_ms": 47.6,
+     "calidad_final": "media",
+     "densidad": 1,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 225,
+     "texturasGPU": 70,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "tour",
+     "room": null,
+     "fps": 77.3,
+     "peor_ms": 33.4,
+     "calidad_final": "media",
+     "densidad": 1,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 225,
+     "texturasGPU": 70,
+     "texturas_cache": 3
+    }
+   ],
+   "heap_mb": 322,
+   "errores": [
+    "Failed to load resource: net::ERR_FAILED"
+   ]
+  },
+  {
+   "calidad": "alta",
+   "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+   "t_listo_ms": 1888,
+   "mediciones": [
+    {
+     "modo": "orbit",
+     "room": null,
+     "fps": 80.6,
+     "peor_ms": 32.4,
+     "calidad_final": "alta",
+     "densidad": 1,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 182,
+     "texturasGPU": 59,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "walk",
+     "room": "social",
+     "fps": 53.5,
+     "peor_ms": 75.1,
+     "calidad_final": "alta",
+     "densidad": 1.125,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 225,
+     "texturasGPU": 70,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "walk",
+     "room": "principal",
+     "fps": 40.3,
+     "peor_ms": 83,
+     "calidad_final": "alta",
+     "densidad": 1.25,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 225,
+     "texturasGPU": 70,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "tour",
+     "room": null,
+     "fps": 42.6,
+     "peor_ms": 46.7,
+     "calidad_final": "alta",
+     "densidad": 1.25,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 225,
+     "texturasGPU": 70,
+     "texturas_cache": 3
+    }
+   ],
+   "heap_mb": 304,
+   "errores": [
+    "Failed to load resource: net::ERR_FAILED"
+   ]
+  }
+ ]
+}

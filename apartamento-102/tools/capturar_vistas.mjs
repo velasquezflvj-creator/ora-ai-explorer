@@ -11,9 +11,10 @@ import { join } from 'node:path';
 const [ruta = '/apartamento-102/recorrido.html', out = 'capturas-v2', calidad = 'media', lista = 'social'] = process.argv.slice(2);
 const base = process.env.ORA_URL || 'http://127.0.0.1:8768';
 const [w, h] = (process.env.VIEWPORT || '1600x900').split('x').map(Number);
+const dpr = Number(process.env.DPR || 1);   // DPR=2: pantalla Retina (lo que ve un Mac)
 mkdirSync(out, { recursive: true });
 const browser = await chromium.launch({ args: ['--use-angle=metal', '--enable-gpu', '--ignore-gpu-blocklist'] });
-const page = await (await browser.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1 })).newPage();
+const page = await (await browser.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: dpr })).newPage();
 const errores = [];
 page.on('pageerror', e => errores.push(e.message));
 page.on('console', m => { if (m.type() === 'error') errores.push(m.text()); });
@@ -22,15 +23,16 @@ await page.waitForFunction(() => window.APTO_API?.ready, null, { timeout: 120000
 await page.waitForFunction(() => APTO_API.entorno().listo, null, { timeout: 120000 }).catch(() => {});
 await page.addStyleTag({ content: '.panel,.card,.bar,.modes,.hint,.walkpad,.caption,#hotspots,#pois,.propbanner,.btn-entrada,.joystick,.envtag{visibility:hidden!important}' });
 for (const room of lista.split(',')) {
-  await page.evaluate(r => { APTO_API.setMode('walk'); APTO_API.goRoom(r); }, room);
+  // «entrada»: el punto de inicio de la caminata (V2+); el resto, la vista a pie de cada espacio
+  await page.evaluate(r => { APTO_API.setMode('walk'); if (r === 'entrada' && APTO_API.irAEntrada) APTO_API.irAEntrada(); else APTO_API.goRoom(r); }, room);
   await page.waitForFunction(() => !APTO_API.state.flying, null, { timeout: 60000 });
   await page.waitForTimeout(1500);
   await page.evaluate(() => APTO_API.render(30));
   await page.waitForTimeout(1200);
   const f = join(out, `${room}.png`);
   await page.screenshot({ path: f });
-  const info = await page.evaluate(() => ({ estado: APTO_API.state, sonda: APTO_API.sonda ?? null, render: APTO_API.stats.render }));
-  console.log(JSON.stringify({ archivo: f, room, calidad: info.estado.quality, sonda: info.sonda, plano: info.estado.plan, render: info.render }));
+  const info = await page.evaluate(() => ({ estado: APTO_API.state, sonda: APTO_API.sonda ?? null, render: APTO_API.stats.render, lienzo: [__ORA.renderer.domElement.width, __ORA.renderer.domElement.height] }));
+  console.log(JSON.stringify({ archivo: f, room, calidad: info.estado.quality, sonda: info.sonda, plano: info.estado.plan, lienzo: info.lienzo, render: info.render }));
 }
 if (errores.length) console.log(JSON.stringify({ errores }));
 await browser.close();

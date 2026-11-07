@@ -31,12 +31,13 @@ function analizar(g) {
   const r = {}, I = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
   const visitar = (i, M) => {
     const n = g.json.nodes[i], W = mul(M, local(n));
-    const e = { extras: JSON.stringify(n.extras ?? null), pos: new Set(), mats: new Set(), uv1: false };
+    const e = { extras: JSON.stringify(n.extras ?? null), pos: new Set(), mats: new Set(), uv1: false, min: [Infinity, Infinity, Infinity], max: [-Infinity, -Infinity, -Infinity] };
     if (n.mesh !== undefined) for (const p of g.json.meshes[n.mesh].primitives) {
       const P = accesor(g, p.attributes.POSITION);
       for (let k = 0; k < P.length; k += 3) {
         const x = W[0] * P[k] + W[4] * P[k + 1] + W[8] * P[k + 2] + W[12], y = W[1] * P[k] + W[5] * P[k + 1] + W[9] * P[k + 2] + W[13], z = W[2] * P[k] + W[6] * P[k + 1] + W[10] * P[k + 2] + W[14];
         e.pos.add(`${Math.round(x * 1e4)},${Math.round(y * 1e4)},${Math.round(z * 1e4)}`);
+        [x, y, z].forEach((v, c) => { e.min[c] = Math.min(e.min[c], v); e.max[c] = Math.max(e.max[c], v); });
       }
       if (p.material !== undefined) e.mats.add(g.json.materials[p.material].name);
       if (p.attributes.TEXCOORD_1 !== undefined) e.uv1 = true;
@@ -58,7 +59,11 @@ for (const n of na) {
   if (a.extras !== b.extras) problemas.push({ nodo: n, extras: 'distintos' });
   if ([...a.mats].sort().join() !== [...b.mats].sort().join()) problemas.push({ nodo: n, materiales: [[...a.mats], [...b.mats]] });
   const faltan = [...a.pos].filter(p => !b.pos.has(p)).length, sobran = [...b.pos].filter(p => !a.pos.has(p)).length;
-  if (faltan || sobran) problemas.push({ nodo: n, posiciones_faltantes: faltan, posiciones_nuevas: sobran });
+  if (faltan || sobran) {
+    // caja envolvente en mm: un bisel o un objeto decorativo reemplazado no deben cambiar las dimensiones exteriores
+    const dif_mm = Math.max(...[0, 1, 2].map(c => Math.max(Math.abs(a.min[c] - b.min[c]), Math.abs(a.max[c] - b.max[c])))) * 1000;
+    problemas.push({ nodo: n, posiciones_faltantes: faltan, posiciones_nuevas: sobran, caja_envolvente_dif_mm: +dif_mm.toFixed(2) });
+  }
   vertices += a.pos.size; if (b.uv1) conUv1++;
 }
 console.log(JSON.stringify({ original: fa, derivado: fb, nodos: na.length, posiciones_unicas_comparadas: vertices, nodos_con_uv1: conUv1, problemas, resultado: problemas.length ? 'DIFERENTE' : 'IDÉNTICO en arquitectura (nodos, extras, materiales y posiciones)' }, null, 1));

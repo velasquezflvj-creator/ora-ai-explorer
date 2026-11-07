@@ -1,0 +1,82 @@
+{
+ "original": "apartamento-102/modelo/apto-102-propuesta.glb",
+ "derivado": "apartamento-102/modelo/web/v5/apto-102-v5.glb",
+ "nodos": 46,
+ "posiciones_unicas_comparadas": 47165,
+ "nodos_con_uv1": 29,
+ "problemas": [
+  {
+   "nodos": {
+    "solo_original": [],
+    "solo_derivado": [
+     "DEC_ceramic_vase_01_01",
+     "DEC_ceramic_vase_01_04",
+     "DEC_ceramic_vase_02_03",
+     "DEC_ceramic_vase_04_02",
+     "DEC_ceramic_vase_04_05",
+     "DEC_food_pears_asian_01",
+     "DEC_wooden_cutting_board"
+    ]
+   }
+  },
+  {
+   "nodo": "APA_Cocina",
+   "materiales": [
+    [
+     "carcasa",
+     "metal_negro",
+     "gabinete_cocina",
+     "laton_cepillado",
+     "vidrio_negro",
+     "electro",
+     "meson",
+     "acero",
+     "luz_calida",
+     "ceramica_deco",
+     "ceramica_calida",
+     "madera_mueble",
+     "cuadro"
+    ],
+    [
+     "carcasa",
+     "metal_negro",
+     "gabinete_cocina",
+     "laton_cepillado",
+     "vidrio_negro",
+     "electro",
+     "meson",
+     "acero",
+     "luz_calida",
+     "ceramica_calida",
+     "madera_mueble",
+     "cuadro"
+    ]
+   ]
+  },
+  {
+   "nodo": "APA_Cocina",
+   "posiciones_faltantes": 3144,
+   "posiciones_nuevas": 15410,
+   "caja_envolvente_dif_mm": 0.67
+  },
+  {
+   "nodo": "ILU_Puerta_entrada",
+   "posiciones_faltantes": 144,
+   "posiciones_nuevas": 608,
+   "caja_envolvente_dif_mm": 0
+  },
+  {
+   "nodo": "MOB_Barra",
+   "posiciones_faltantes": 2342,
+   "posiciones_nuevas": 9745,
+   "caja_envolvente_dif_mm": 0.44
+  },
+  {
+   "nodo": "MOB_Sala",
+   "posiciones_faltantes": 668,
+   "posiciones_nuevas": 9521,
+   "caja_envolvente_dif_mm": 0
+  }
+ ],
+ "resultado": "DIFERENTE"
+}
