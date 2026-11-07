@@ -10,6 +10,7 @@ con otro apartamento sin reconstruir el sistema a mano. Es un procedimiento inte
 | 1. Modelo | `apartamento-NNN/tools/generar_glb.py` (por apartamento) | planta (JSON derivado del DWG) | `modelo/apto-NNN.glb` con nombres `ARQ_ / PRO_ / ILU_ / APA_ / MOB_ / PROP_` y `extras` (verificado, categoría, fuente, huella) |
 | 2. Escena de render | `blender/scripts/importar_apartamento.py` | GLB + `blender/scripts/apto-NNN.json` | `.blend` con muebles, materiales PBR, luces 4200 K, portales, cámara de prueba y advertencias |
 | 3. Recursos web | `blender/scripts/exportar_web.py` | `.blend` + JSON | `modelo/web/texturas/*.jpg` (claves del visor), piso horneado, `modelo/web/sondas/*.hdr` |
+| 3b. Luz horneada (V3) | `blender/scripts/hornear_planos_web.py` | `.blend` + JSON (`horneado`) | `modelo/web/horneado/piso_luz.hdr`, `cielo.hdr`, `horneado.json` (piso y cielo raso; sin tocar el GLB) |
 | 4. Visor | `apartamento-NNN/tools/build_recorrido.mjs` | GLB, planta, muebles, `modelo/web` | `dist/recorrido-app.js`, `dist/recorrido-datos.js` |
 | 5. Video | `blender/scripts/camara_video.py` | `.blend` + JSON (`video.tomas`) | `.blend` de video, vista previa MP4 y estimación del render final |
 | 6. Control | `tests/*.test.cjs`, `tools/medir_rendimiento.mjs`, `tools/capturar_vistas.mjs` | servidor local | pruebas, fps por perfil, capturas comparables con Blender |
@@ -35,7 +36,8 @@ Todo lo específico de un apartamento vive en **un JSON** (`blender/scripts/apto
 3. `Blender -b --factory-startup --python blender/scripts/importar_apartamento.py -- blender/scripts/apto-NNN.json blender/Apartamento_NNN_Render_Master.blend`
 4. Revisar en Blender (render de prueba) y ajustar el JSON; repetir el paso 3 si hace falta (no se edita a mano).
 5. `Blender -b blender/Apartamento_NNN_Render_Master.blend --python blender/scripts/exportar_web.py -- blender/scripts/apto-NNN.json apartamento-NNN/modelo/web`
-6. Copiar `apartamento-102/recorrido.html`, `css/recorrido.css`, `src/app-recorrido.mjs` y `tools/build_recorrido.mjs`
+5b. Luz horneada: `Blender -b blender/Apartamento_NNN_Render_Master.blend --python blender/scripts/hornear_planos_web.py -- blender/scripts/apto-NNN.json apartamento-NNN/modelo/web/horneado` (ajustar `horneado.centro` y `lado_m` a la huella).
+6. Copiar `apartamento-102/recorrido-v3.html`, `css/recorrido-v3.css`, `src/app-recorrido-v3.mjs` y `tools/build_recorrido_v3.mjs`
    al nuevo apartamento y ajustar lo que hoy está fijo en el código del 102 (ver «Pendiente de generalizar»).
 7. `node apartamento-NNN/tools/build_recorrido.mjs`, `npm test`, `node apartamento-NNN/tools/medir_rendimiento.mjs ...`
 8. Video: `camara_video.py ... --estimar 3` y `--vista-previa` antes de decidir un render final.

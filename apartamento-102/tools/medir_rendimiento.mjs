@@ -32,23 +32,24 @@ try {
     await page.waitForFunction(() => window.APTO_API?.ready, null, { timeout: 120000 });
     const tListo = Date.now() - t0;
     const gpu = await page.evaluate(() => { const g = __ORA.renderer.getContext(); const d = g.getExtension('WEBGL_debug_renderer_info'); return d ? g.getParameter(d.UNMASKED_RENDERER_WEBGL) : 'n/a'; });
-    const medir = async (modo, extra) => page.evaluate(async ([modo, extra]) => {
+    const medir = async (modo, extra) => page.evaluate(async ([modo, extra, CALENTAR]) => {
       APTO_API.setMode(modo);
       if (extra?.room) APTO_API.goRoom(extra.room);
       const espera = ms => new Promise(r => setTimeout(r, ms));
       for (let i = 0; i < 100 && APTO_API.state.flying; i++) await espera(100);
-      await espera(800);
-      let n = 0, t0 = 0, peor = 0, ult = 0;
       const tecla = modo === 'walk' ? 'ArrowRight' : null;
       if (tecla) document.body.dispatchEvent(new KeyboardEvent('keydown', { key: tecla, bubbles: true }));
+      // calentamiento girando (renderizando): da tiempo a la resolución dinámica del V3 (p. ej. CALENTAR=6000)
+      { const fin = performance.now() + +(CALENTAR || 800); await new Promise(res => { const f = () => { APTO_API.render(4); performance.now() < fin ? requestAnimationFrame(f) : res(); }; requestAnimationFrame(f); }); }
+      let n = 0, t0 = 0, peor = 0, ult = 0;
       await new Promise(res => {
         const f = t => { if (!t0) { t0 = t; ult = t; } else { peor = Math.max(peor, t - ult); ult = t; n++; } if (t - t0 < 5000) { APTO_API.render(4); requestAnimationFrame(f); } else res(); };
         requestAnimationFrame(f);
       });
       if (tecla) document.body.dispatchEvent(new KeyboardEvent('keyup', { key: tecla, bubbles: true }));
       const s = APTO_API.stats;
-      return { modo, room: extra?.room || null, fps: +(n / ((ult - t0) / 1000)).toFixed(1), peor_ms: +peor.toFixed(1), calidad_final: APTO_API.state.quality, ...s.render, texturas_cache: s.texturas };
-    }, [modo, extra]);
+      return { modo, room: extra?.room || null, fps: +(n / ((ult - t0) / 1000)).toFixed(1), peor_ms: +peor.toFixed(1), calidad_final: APTO_API.state.quality, densidad: APTO_API.densidad ?? null, ...s.render, texturas_cache: s.texturas };
+    }, [modo, extra, +(process.env.CALENTAR || 800)]);
     const r = { calidad: q, gpu, t_listo_ms: tListo, mediciones: [] };
     r.mediciones.push(await medir('orbit'));
     r.mediciones.push(await medir('walk', { room: 'social' }));

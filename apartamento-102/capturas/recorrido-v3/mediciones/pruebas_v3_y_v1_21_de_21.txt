@@ -1,0 +1,29 @@
+✔ programa: 2 habitaciones amplias, 2 baños, sin estudio (375.539ms)
+✔ la envolvente, los vanos de fachada, el acceso y los ductos son los del DWG (0.348ms)
+✔ el GLB separa envolvente del DWG, propuesta e ilustrativo (0.42775ms)
+✔ con el mobiliario puesto se llega caminando a todos los espacios y al balcón (78.315083ms)
+✔ ingreso: pasa un ancho libre de 0,90 m entre la despensa y el mesón hasta la cocina (9.108ms)
+✔ modelo 3D: el ingreso mide al menos 0,90 m entre la despensa y el mesón, y los muebles detallados cargan (13413.465292ms)
+✔ presentación: texturas PBR propias, exterior con HDRI y árboles 3D, día/atardecer, calidad y puerta oculta de ropas (34764.274375ms)
+✔ el visor rotula la propuesta y ofrece espacios, puntos y leyenda (9939.430917ms)
+✔ «Solo envolvente del DWG» oculta la propuesta y dibuja la planta original (12361.565833ms)
+✔ caminar: colisiones con tabiques, mobiliario y hojas de puerta de la propuesta (32817.520625ms)
+✔ la trayectoria del recorrido no atraviesa muros, muebles, hojas ni baranda (9862.499042ms)
+✔ recorrido de 12 capítulos: visita todos los espacios, se pausa y se explora desde ahí (27697.759917ms)
+✔ acabados y responsive en teléfono (12488.935834ms)
+✔ abre desde el archivo (sin servidor) (10389.464875ms)
+✔ el V3 no modifica el V1, el V2 ni el modelo (294.397958ms)
+✔ carga con sondas de luz, texturas fotográficas y rótulos de propuesta (23520.217333ms)
+✔ caminar empieza en la entrada; «Entrada» vuelve al inicio; la sonda sigue al visitante (62036.050583ms)
+✔ colisiones: no atraviesa muros ni sale por el acceso (61621.604333ms)
+✔ teléfono: perfil Móvil automático y joystick táctil (31683.710875ms)
+✔ luz horneada de día en piso y cielo raso; se apaga al atardecer y en la vista técnica (18014.073792ms)
+✔ sol del render V3, focos dirigidos, sombras estáticas y densidad dentro del rango del perfil (14854.119833ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 376962.768291

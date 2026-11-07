@@ -1,0 +1,195 @@
+{
+ "ruta": "/apartamento-102/recorrido.html",
+ "viewport": "1440x900@2",
+ "calidades": [
+  {
+   "calidad": "baja",
+   "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+   "t_listo_ms": 791,
+   "mediciones": [
+    {
+     "modo": "orbit",
+     "room": null,
+     "fps": 351.8,
+     "peor_ms": 17.4,
+     "calidad_final": "baja",
+     "densidad": null,
+     "llamadas": 181,
+     "triangulos": 171636,
+     "geometrias": 182,
+     "texturasGPU": 39,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "walk",
+     "room": "social",
+     "fps": 173.2,
+     "peor_ms": 26.2,
+     "calidad_final": "baja",
+     "densidad": null,
+     "llamadas": 108,
+     "triangulos": 169150,
+     "geometrias": 222,
+     "texturasGPU": 50,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "walk",
+     "room": "principal",
+     "fps": 135.9,
+     "peor_ms": 24.7,
+     "calidad_final": "baja",
+     "densidad": null,
+     "llamadas": 135,
+     "triangulos": 234562,
+     "geometrias": 222,
+     "texturasGPU": 51,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "tour",
+     "room": null,
+     "fps": 162,
+     "peor_ms": 14.6,
+     "calidad_final": "baja",
+     "densidad": null,
+     "llamadas": 216,
+     "triangulos": 314580,
+     "geometrias": 222,
+     "texturasGPU": 52,
+     "texturas_cache": 3
+    }
+   ],
+   "heap_mb": 116,
+   "errores": [
+    "Failed to load resource: net::ERR_FAILED"
+   ]
+  },
+  {
+   "calidad": "media",
+   "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+   "t_listo_ms": 1320,
+   "mediciones": [
+    {
+     "modo": "orbit",
+     "room": null,
+     "fps": 71.6,
+     "peor_ms": 33.5,
+     "calidad_final": "media",
+     "densidad": null,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 183,
+     "texturasGPU": 47,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "walk",
+     "room": "social",
+     "fps": 37.6,
+     "peor_ms": 105.7,
+     "calidad_final": "media",
+     "densidad": null,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 225,
+     "texturasGPU": 59,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "walk",
+     "room": "principal",
+     "fps": 40.7,
+     "peor_ms": 75.5,
+     "calidad_final": "media",
+     "densidad": null,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 225,
+     "texturasGPU": 59,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "tour",
+     "room": null,
+     "fps": 44.1,
+     "peor_ms": 53.3,
+     "calidad_final": "media",
+     "densidad": null,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 225,
+     "texturasGPU": 61,
+     "texturas_cache": 3
+    }
+   ],
+   "heap_mb": 109,
+   "errores": [
+    "Failed to load resource: net::ERR_FAILED"
+   ]
+  },
+  {
+   "calidad": "alta",
+   "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+   "t_listo_ms": 2019,
+   "mediciones": [
+    {
+     "modo": "orbit",
+     "room": null,
+     "fps": 12.8,
+     "peor_ms": 171.7,
+     "calidad_final": "alta",
+     "densidad": null,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 183,
+     "texturasGPU": 47,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "walk",
+     "room": "social",
+     "fps": 11.4,
+     "peor_ms": 403,
+     "calidad_final": "alta",
+     "densidad": null,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 225,
+     "texturasGPU": 58,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "walk",
+     "room": "principal",
+     "fps": 10.2,
+     "peor_ms": 333,
+     "calidad_final": "alta",
+     "densidad": null,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 225,
+     "texturasGPU": 58,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "tour",
+     "room": null,
+     "fps": 12.7,
+     "peor_ms": 163.6,
+     "calidad_final": "alta",
+     "densidad": null,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 225,
+     "texturasGPU": 60,
+     "texturas_cache": 3
+    }
+   ],
+   "heap_mb": 116,
+   "errores": [
+    "Failed to load resource: net::ERR_FAILED"
+   ]
+  }
+ ]
+}

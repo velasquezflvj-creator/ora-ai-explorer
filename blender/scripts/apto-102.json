@@ -778,5 +778,18 @@
       1.15
     ],
     "lente_mm": 18
+  },
+  "horneado": {
+    "centro": [
+      0.0,
+      0.0
+    ],
+    "lado_m": 8.0,
+    "albedo_piso_lineal": [
+      0.7,
+      0.64,
+      0.56
+    ],
+    "nota": "Piso y cielo raso: ARQ_Piso_* a z=0 y ARQ_Cielo/ILU_Cielo_detalles a z=2,3-2,4 dentro de x,y en [-4,4] m (Blender)"
   }
 }

@@ -1,0 +1,33 @@
+{
+ "ruta": "/apartamento-102/recorrido.html",
+ "calidad": "alta",
+ "viewport": "1440x900@2",
+ "resultados": [
+  {
+   "caso": "completo",
+   "fps": 15.1
+  },
+  {
+   "caso": "sin_actualizar_sombras",
+   "fps": 16
+  },
+  {
+   "caso": "sin_gtao",
+   "fps": 16.2
+  },
+  {
+   "caso": "densidad_1.5x",
+   "fps": 25.5
+  },
+  {
+   "caso": "arboles_sin_sombra",
+   "fps": 16.4,
+   "mallas": 19,
+   "triangulos": 318776
+  },
+  {
+   "caso": "sombra_estatica+1.5x+arboles",
+   "fps": 27.4
+  }
+ ]
+}

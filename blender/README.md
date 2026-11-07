@@ -19,6 +19,8 @@ B="/Applications/Blender.app/Contents/MacOS/Blender"   # o la ruta de Blender 5.
 "$B" -b --factory-startup --python blender/scripts/importar_apartamento.py -- blender/scripts/apto-102.json blender/Apartamento_102_Render_Nuevo.blend
 # recursos del visor web: texturas, piso horneado y sondas 360°
 "$B" -b blender/Apartamento_102_Render_V3.blend --python blender/scripts/exportar_web.py -- blender/scripts/apto-102.json apartamento-102/modelo/web
+# luz horneada del piso y del cielo raso para el recorrido V3 (no guarda el .blend de entrada)
+"$B" -b blender/Apartamento_102_Render_V3.blend --python blender/scripts/hornear_planos_web.py -- blender/scripts/apto-102.json apartamento-102/modelo/web/horneado
 # recorrido cinematográfico: estimación del render final y vista previa EEVEE
 "$B" -b blender/Apartamento_102_Render_V3.blend --python blender/scripts/camara_video.py -- blender/scripts/apto-102.json blender/Apartamento_102_Video.blend --estimar 3
 "$B" -b blender/Apartamento_102_Video.blend --python blender/scripts/camara_video.py -- blender/scripts/apto-102.json blender/Apartamento_102_Video.blend --vista-previa blender/render/Apartamento_102_Recorrido_previa_640x360.mp4

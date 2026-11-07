@@ -1,0 +1,195 @@
+{
+ "ruta": "/apartamento-102/recorrido-v3.html",
+ "viewport": "1440x900@2",
+ "calidades": [
+  {
+   "calidad": "baja",
+   "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+   "t_listo_ms": 1785,
+   "mediciones": [
+    {
+     "modo": "orbit",
+     "room": null,
+     "fps": 260.7,
+     "peor_ms": 11.9,
+     "calidad_final": "baja",
+     "densidad": 1,
+     "llamadas": 181,
+     "triangulos": 171636,
+     "geometrias": 181,
+     "texturasGPU": 50,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "walk",
+     "room": "social",
+     "fps": 109.5,
+     "peor_ms": 31.4,
+     "calidad_final": "baja",
+     "densidad": 1,
+     "llamadas": 120,
+     "triangulos": 164790,
+     "geometrias": 222,
+     "texturasGPU": 59,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "walk",
+     "room": "principal",
+     "fps": 111.3,
+     "peor_ms": 27.6,
+     "calidad_final": "baja",
+     "densidad": 1,
+     "llamadas": 136,
+     "triangulos": 234658,
+     "geometrias": 222,
+     "texturasGPU": 59,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "tour",
+     "room": null,
+     "fps": 155.5,
+     "peor_ms": 23,
+     "calidad_final": "baja",
+     "densidad": 1,
+     "llamadas": 216,
+     "triangulos": 314580,
+     "geometrias": 222,
+     "texturasGPU": 59,
+     "texturas_cache": 3
+    }
+   ],
+   "heap_mb": 123,
+   "errores": [
+    "Failed to load resource: net::ERR_FAILED"
+   ]
+  },
+  {
+   "calidad": "media",
+   "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+   "t_listo_ms": 1526,
+   "mediciones": [
+    {
+     "modo": "orbit",
+     "room": null,
+     "fps": 73.4,
+     "peor_ms": 32.8,
+     "calidad_final": "media",
+     "densidad": 1,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 182,
+     "texturasGPU": 58,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "walk",
+     "room": "social",
+     "fps": 52.7,
+     "peor_ms": 787,
+     "calidad_final": "media",
+     "densidad": 1,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 225,
+     "texturasGPU": 68,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "walk",
+     "room": "principal",
+     "fps": 62.9,
+     "peor_ms": 652.9,
+     "calidad_final": "media",
+     "densidad": 0.75,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 225,
+     "texturasGPU": 69,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "tour",
+     "room": null,
+     "fps": 50.4,
+     "peor_ms": 53,
+     "calidad_final": "media",
+     "densidad": 1,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 225,
+     "texturasGPU": 69,
+     "texturas_cache": 3
+    }
+   ],
+   "heap_mb": 148,
+   "errores": [
+    "Failed to load resource: net::ERR_FAILED"
+   ]
+  },
+  {
+   "calidad": "alta",
+   "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+   "t_listo_ms": 1456,
+   "mediciones": [
+    {
+     "modo": "orbit",
+     "room": null,
+     "fps": 35.7,
+     "peor_ms": 65.8,
+     "calidad_final": "alta",
+     "densidad": 1.25,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 182,
+     "texturasGPU": 58,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "walk",
+     "room": "social",
+     "fps": 34.8,
+     "peor_ms": 930.2,
+     "calidad_final": "alta",
+     "densidad": 1,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 225,
+     "texturasGPU": 69,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "walk",
+     "room": "principal",
+     "fps": 34.2,
+     "peor_ms": 999.8,
+     "calidad_final": "alta",
+     "densidad": 1,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 225,
+     "texturasGPU": 69,
+     "texturas_cache": 3
+    },
+    {
+     "modo": "tour",
+     "room": null,
+     "fps": 37.9,
+     "peor_ms": 63.7,
+     "calidad_final": "alta",
+     "densidad": 1,
+     "llamadas": 1,
+     "triangulos": 1,
+     "geometrias": 225,
+     "texturasGPU": 69,
+     "texturas_cache": 3
+    }
+   ],
+   "heap_mb": 139,
+   "errores": [
+    "Failed to load resource: net::ERR_FAILED"
+   ]
+  }
+ ]
+}
