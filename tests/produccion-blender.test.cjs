@@ -17,7 +17,9 @@ const blender = process.env.BLENDER || '/Volumes/Blender/Blender.app/Contents/Ma
 const respaldo = process.env.ORA_RESPALDO_VAST || path.join(os.homedir(), 'Downloads/ora-vast-respaldo-C59621459-2026-11-08/workspace/ora_restore_4080/proyecto_ora/paquete');
 const escenaV1 = path.join(respaldo, 'rediseno_sala/escena_sala_rediseno_v1.blend');
 const v2 = path.join(prod, 'rediseno_sala/rediseno_sala_v2_no_ejecutado.py');
-const hayBlender = fs.existsSync(blender) && fs.existsSync(escenaV1);
+// ORA_SIN_BLENDER_LOCAL=1 omite las pruebas que abren Blender en el Mac (p. ej. mientras la GPU remota trabaja)
+const blenderLocal = !process.env.ORA_SIN_BLENDER_LOCAL && fs.existsSync(blender);
+const hayBlender = blenderLocal && fs.existsSync(escenaV1);
 const escenaP3 = path.join(respaldo, 'v4/escena_v4_2_prueba3.blend');
 
 test('C3 y C4 usan el mismo módulo de luz V4.2 definitiva', () => {
@@ -32,7 +34,7 @@ test('C3 y C4 usan el mismo módulo de luz V4.2 definitiva', () => {
   assert.match(luz, /SOL_K = 3800\.0/); assert.match(luz, /FONDO_LUZ = 0\.35/);
 });
 
-test('C4: la luz V4.2 definitiva se aplica en CPU sin render y la escena fuente no cambia', { skip: !(fs.existsSync(blender) && fs.existsSync(escenaP3)) && 'sin Blender local o sin respaldo' }, () => {
+test('C4: la luz V4.2 definitiva se aplica en CPU sin render y la escena fuente no cambia', { skip: !(blenderLocal && fs.existsSync(escenaP3)) && 'sin Blender local o sin respaldo' }, () => {
   const antes = sha(escenaP3); const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'ora-c4-'));
   try {
     const copia = path.join(tmp, 'escena_v4_2_final.blend');

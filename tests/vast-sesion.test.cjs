@@ -98,3 +98,12 @@ test('--seco no ejecuta nada', () => {
   const r = correr('--seco', 'traer', 'datos/prueba'); assert.equal(r.rc, 0, r.out); assert.match(r.out, /\(seco\)/);
   assert.ok(!fs.existsSync(env.RESPALDO_MAC));
 });
+
+test('configurar escribe la IP y el puerto nuevos a partir de la línea «Connect» de Vast', () => {
+  const destino = path.join(raiz, 'vast.env');
+  let r = spawnSync('bash', [script, 'configurar', 'ssh -p 41234 root@203.0.113.7 -L 8080:localhost:8080'], { env: { ...env, VAST_ENV: destino }, encoding: 'utf8', cwd: repo });
+  assert.equal(r.status, 0, r.stderr); const conf = fs.readFileSync(destino, 'utf8');
+  assert.match(conf, /^VAST_HOST=203\.0\.113\.7$/m); assert.match(conf, /^VAST_PUERTO=41234$/m); assert.match(conf, /^VAST_LLAVE=/m);
+  r = spawnSync('bash', [script, 'configurar', 'ssh root@sin-puerto'], { env: { ...env, VAST_ENV: destino }, encoding: 'utf8', cwd: repo });
+  assert.notEqual(r.status, 0); assert.match(r.stderr, /uso: configurar/);
+});

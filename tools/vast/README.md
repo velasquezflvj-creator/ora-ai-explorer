@@ -4,7 +4,7 @@
 bloqueo, traer resultados verificados y detener la instancia. Lo usan igual Claude (por SSH desde el Mac) y Codex.
 
 ```bash
-cp tools/vast/vast.env.ejemplo tools/vast/vast.env   # ajustar IP y puerto de la instancia iniciada (cambian en cada inicio)
+tools/vast/sesion.sh configurar 'ssh -p PUERTO root@IP'   # línea «Connect» de Vast: escribe tools/vast/vast.env (IP/puerto cambian en cada inicio)
 tools/vast/sesion.sh estado
 tools/vast/sesion.sh subir                            # blender/produccion del commit actual → paquete/_codigo/<rama>-<commit>/
 tools/vast/sesion.sh preflight
@@ -12,6 +12,8 @@ tools/vast/sesion.sh ejecutar --agente claude --escena v4/escena_v4_2.blend --sc
 tools/vast/sesion.sh ejecutar --agente claude --escena … --script … --confirmar -- …                          # solo con aprobación
 tools/vast/sesion.sh cerrar datos/prueba_visual_v4_4080/hero rediseno_sala                                  # traer + detener
 ```
+
+Procedimiento completo de arranque: [`docs/arranque-gpu-vast.md`](../../docs/arranque-gpu-vast.md).
 
 Protecciones
 

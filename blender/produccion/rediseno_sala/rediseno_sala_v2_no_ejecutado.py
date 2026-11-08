@@ -272,7 +272,9 @@ try:
     for dv in cp.devices: dv.use = dv.type == 'OPTIX'
 except TypeError:   # equipo sin NVIDIA (p. ej. el Mac en --sin-render): no hay OptiX; el render real lo exige más abajo
     cp.devices.foreach_set('use', [False] * len(cp.devices)) if len(cp.devices) else None
-c = sc.cycles; sc.render.engine = 'CYCLES'; c.device = 'GPU'; c.denoiser = 'OPTIX'; c.use_denoising = True; c.denoising_input_passes = 'RGB_ALBEDO_NORMAL'
+HAY_OPTIX = any(dv.use and dv.type == 'OPTIX' for dv in cp.devices)
+c = sc.cycles; sc.render.engine = 'CYCLES'; c.device = 'GPU'; c.use_denoising = True; c.denoising_input_passes = 'RGB_ALBEDO_NORMAL'
+c.denoiser = 'OPTIX' if HAY_OPTIX else 'OPENIMAGEDENOISE'   # en el Mac no existe OptiX; en Vast (RTX 4080) sí
 c.samples = 512; c.use_adaptive_sampling = True; c.adaptive_threshold = 0.008
 sc.render.resolution_x, sc.render.resolution_y, sc.render.resolution_percentage = 1280, 720, 100
 sc.render.image_settings.file_format = 'PNG'; sc.render.image_settings.color_mode = 'RGB'; sc.render.image_settings.color_depth = '8'

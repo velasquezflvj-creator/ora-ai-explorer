@@ -5,6 +5,7 @@
 #   tools/vast/sesion.sh <orden> [opciones]
 #
 # Órdenes
+#   configurar 'ssh -p P root@IP' Escribe tools/vast/vast.env con la IP y el puerto nuevos (cambian en cada arranque).
 #   estado                       Conexión, GPU, bloqueo, disco, Blender y costo por hora de la instancia.
 #   subir                        Copia blender/produccion/ del commit actual a paquete/_codigo/<rama>-<commit>/ (carpeta
 #                                nueva e inmutable; nunca sobrescribe código ni datos remotos).
@@ -36,7 +37,8 @@ REGISTRO="${ORA_REGISTRO:-$REPO/docs/registro-gpu.md}"
 
 msg() { printf '[vast] %s\n' "$*"; }
 falla() { printf '[vast] ERROR: %s\n' "$*" >&2; exit 1; }
-ssh_opts() { echo "-i $VAST_LLAVE -p $VAST_PUERTO -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=15 -o LogLevel=ERROR"; }
+# accept-new: al reiniciar, Vast asigna IP/puerto nuevos; se acepta la clave del host la primera vez y se rechaza si luego cambia
+ssh_opts() { echo "-i $VAST_LLAVE -p $VAST_PUERTO -o BatchMode=yes -o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 -o LogLevel=ERROR"; }
 
 # Ejecuta un comando en la instancia (o localmente en modo simulación, con /workspace → ORA_VAST_RAIZ_LOCAL)
 remoto() {
@@ -53,6 +55,15 @@ sincronizar() {   # rsync origen destino (sin sobrescribir nunca)
   local o="$1" d="$2"
   if [[ "$SECO" == 1 ]]; then msg "(seco) rsync --ignore-existing $o $d"; return 0; fi
   if [[ "$LOCAL" == 1 ]]; then rsync -a --ignore-existing "$o" "$d"; else rsync -a --ignore-existing -e "ssh $(ssh_opts)" "$o" "$d"; fi
+}
+
+cmd_configurar() {   # tools/vast/sesion.sh configurar 'ssh -p PUERTO root@IP'  (línea «Connect» de la consola de Vast)
+  local linea="${1:-}" puerto host
+  puerto="$(sed -nE 's/.*-p[[:space:]]*([0-9]+).*/\1/p' <<< "$linea")"; host="$(sed -nE 's/.*root@([0-9A-Za-z.-]+).*/\1/p' <<< "$linea")"
+  [[ -n "$puerto" && -n "$host" ]] || falla "uso: configurar 'ssh -p PUERTO root@IP' (copie la línea de Connect en la consola de Vast)"
+  local destino="${VAST_ENV:-$REPO/tools/vast/vast.env}"; [[ "$destino" == /dev/null ]] && destino="$ESTADO_DIR/vast.env"
+  sed -e "s/^VAST_HOST=.*/VAST_HOST=$host/" -e "s/^VAST_PUERTO=.*/VAST_PUERTO=$puerto/" "$REPO/tools/vast/vast.env.ejemplo" > "$destino"
+  msg "configurado $destino → $host:$puerto"
 }
 
 cmd_estado() {
@@ -152,7 +163,7 @@ registrar() {
 [[ "${1:-}" == "--seco" ]] && { SECO=1; shift; }
 orden="${1:-ayuda}"; shift || true
 case "$orden" in
-  estado) cmd_estado;; subir) cmd_subir;; preflight) cmd_preflight;; ejecutar) cmd_ejecutar "$@";;
+  configurar) cmd_configurar "$@";; estado) cmd_estado;; subir) cmd_subir;; preflight) cmd_preflight;; ejecutar) cmd_ejecutar "$@";;
   traer) cmd_traer "$@";; detener) cmd_detener;; cerrar) cmd_traer "$@"; cmd_detener;;
   ayuda|-h|--help) sed -n '2,24p' "$0" | sed 's/^# \{0,1\}//';;
   *) falla "orden desconocida: $orden (use: ayuda)";;
