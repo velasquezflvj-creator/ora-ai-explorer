@@ -10,7 +10,12 @@
 import bpy, bmesh, sys, os, math, json, time
 import numpy as np
 from mathutils import Vector, Matrix
-SAL, OUT = sys.argv[sys.argv.index('--') + 1:][:2]
+ARGS = sys.argv[sys.argv.index('--') + 1:]; SAL, OUT = ARGS[:2]
+SIN_RENDER = '--sin-render' in ARGS          # prueba local en CPU: todo menos el render (no requiere GPU)
+LUZ_V42 = '--luz-prueba3' not in ARGS        # por defecto, la luz V4.2 definitiva (misma que C4: sol 3800 K, luz ambiental 0,35)
+ESCALA_ARTE = float(os.environ.get('ORA_ESCALA_ARTE', '1'))   # <1 solo para pruebas locales (la obra final es 4K)
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+from comun import luz_v42
 sc = bpy.context.scene; OX, OY = 4.037, 3.8; col = bpy.data.collections['REDISENO_SALA']
 reg = {'sofa_simulacion': [], 'cuadro': {}, 'mueble_tv': [], 'iluminacion': [], 'tiempos_s': {}}
 T0 = time.time()
@@ -50,13 +55,34 @@ def vivo(nombre, o, ids, mat, r=0.0042):
     sp.use_cyclic_u = True; cu.materials.append(mat); ob = bpy.data.objects.new(nombre, cu); col.objects.link(ob); return ob
 def colisionador(o):
     if not any(m.type == 'COLLISION' for m in o.modifiers): o.modifiers.new('colision', 'COLLISION'); o.collision.thickness_outer = 0.003
-def simular(nombre, colis, cortes, elevar, resorte, presion, frames=40):
+from mathutils.bvhtree import BVHTree
+def solapes(o, colis):
+    """Pares de caras que se intersecan entre `o` y sus colisionadores (estado actual, coordenadas de mundo)."""
+    dg = bpy.context.evaluated_depsgraph_get()
+    def arbol(x):
+        e = x.evaluated_get(dg); me = e.to_mesh(); M = x.matrix_world
+        t = BVHTree.FromPolygons([M @ v.co for v in me.vertices], [p.vertices[:] for p in me.polygons]); e.to_mesh_clear(); return t
+    t = arbol(o); return {c: n for c in colis if (n := len(t.overlap(arbol(obj(c)))))}
+def separar(o, colis, mover=(0.0, 0.0, 0.0), encoger=1.0, pasos=40):
+    """Antes de simular: deja el cojín SIN intersecciones iniciales (si empieza dentro de un colisionador, la colisión lo
+    expulsa y la simulación se descarta). Avanza `mover` y/o reduce en planta por `encoger` en cada paso."""
+    ini = solapes(o, colis); hechos = 0
+    while ini and hechos < pasos and solapes(o, colis):
+        o.location += Vector(mover)
+        if encoger != 1.0:
+            cen = sum((v.co for v in o.data.vertices), Vector()) / len(o.data.vertices)
+            for v in o.data.vertices: v.co.x = cen.x + (v.co.x - cen.x) * encoger; v.co.y = cen.y + (v.co.y - cen.y) * encoger
+            o.data.update()
+        hechos += 1
+    return {'solapes_iniciales': ini, 'pasos_separacion': hechos, 'solapes_restantes': solapes(o, colis)}
+def simular(nombre, colis, cortes, elevar, resorte, presion, frames=40, mover=(0.0, 0.0, 0.0), encoger=1.0):
     o = obj(nombre); t = time.time()
     sub_niv = next((m.levels for m in o.modifiers if m.type == 'SUBSURF'), 2)
     for m in list(o.modifiers): o.modifiers.remove(m)
     bm = bmesh.new(); bm.from_mesh(o.data); bmesh.ops.subdivide_edges(bm, edges=bm.edges[:], cuts=cortes, use_grid_fill=True); bm.to_mesh(o.data); bm.free()
     o.location += Vector(elevar)
     anillos = anillos_costura(o, 25)   # 25°: detecta también el lado largo del asiento (con 35° quedaba un tramo de 63 cm sin vivo)
+    sep = separar(o, colis, mover, encoger)
     original = o.data.copy(); v0 = volumen(o.data)
     for c in colis: colisionador(obj(c))
     cl = o.modifiers.new('tela', 'CLOTH'); s = cl.settings
@@ -75,15 +101,15 @@ def simular(nombre, colis, cortes, elevar, resorte, presion, frames=40):
     sb = o.modifiers.new('sub', 'SUBSURF'); sb.levels = 1; sb.render_levels = sub_niv
     mat = o.data.materials[0] if o.data.materials else None
     for i, ids in enumerate(anillos): vivo(f'{nombre}_vivo_{i+1}', o, ids, mat)
-    r = {'cojin': nombre, 'vertices': len(o.data.vertices), 'volumen_conservado': round(v1 / v0, 3), 'desplazamiento_max_m': round(desp, 3),
+    r = {'cojin': nombre, **sep, 'vertices': len(o.data.vertices), 'volumen_conservado': round(v1 / v0, 3), 'desplazamiento_max_m': round(desp, 3),
          'vivos': len(anillos), 'aceptado': ok, 'segundos': round(time.time() - t, 1)}
     reg['sofa_simulacion'].append(r); print('[sala2] TELA', r); return o
 for o in [o for o in col.objects if o.name.endswith('_vivo')]: bpy.data.objects.remove(o, do_unlink=True)   # vivos de V1 (se rehacen)
 BASES = ['SOFA_base', 'SOFA_concha_respaldo_brazos', 'SOFA_zocalo_bronce']
-simular('SOFA_asiento_continuo', BASES, 3, (0, 0, 0.06), 15, 0.5)
-for k in (1, 2): simular(f'SOFA_cojin_respaldo_{k}', BASES + ['SOFA_asiento_continuo'], 3, (0.01, 0, 0.05), 12, 0.3)
+simular('SOFA_asiento_continuo', BASES, 3, (0, 0, 0.06), 15, 0.5, encoger=0.99)
+for k in (1, 2): simular(f'SOFA_cojin_respaldo_{k}', BASES + ['SOFA_asiento_continuo'] + [f'SOFA_cojin_respaldo_{3 - k}'] * (k == 2), 3, (0.01, 0, 0.05), 12, 0.3, mover=(0.005, 0, 0.002))
 for n in ('SOFA_deco_marfil', 'SOFA_deco_carbon', 'SOFA_deco_topo'):
-    simular(n, BASES + ['SOFA_asiento_continuo', 'SOFA_cojin_respaldo_1', 'SOFA_cojin_respaldo_2'], 2, (0.02, 0, 0.06), 5, 0.3, frames=45)
+    simular(n, BASES + ['SOFA_asiento_continuo', 'SOFA_cojin_respaldo_1', 'SOFA_cojin_respaldo_2'], 2, (0.02, 0, 0.06), 5, 0.3, frames=45, mover=(0.005, 0, 0.003))
 for o in sc.objects:
     for m in [m for m in o.modifiers if m.type == 'COLLISION']: o.modifiers.remove(m)
 reg['tiempos_s']['sofa'] = round(time.time() - T0, 1)
@@ -91,7 +117,7 @@ reg['tiempos_s']['sofa'] = round(time.time() - T0, 1)
 # ================================================================ 2. CUADRO: composición 4K, relieve real, marco con ingletes
 t = time.time()
 AW, AH = 1.90, 1.05; YC = (1.04 + 3.16) / 2 - OY; ACZ = 1.50; XW = -3.86
-PH, PW = 2112, 3820
+PH, PW = int(2112 * ESCALA_ARTE), int(3820 * ESCALA_ARTE)
 def ruido(h, w, oct_, base, sem):
     rng = np.random.default_rng(sem); out = np.zeros((h, w), np.float32); amp = 1.0; tot = 0
     for o_ in range(oct_):
@@ -235,10 +261,17 @@ for n, ytg in (('Luz_social_1', YC - 0.55), ('Luz_social_2', YC + 0.55)):
     reg['iluminacion'].append({'foco': n, 'rotacion_antes': antes, 'rotacion_despues': [round(math.degrees(a), 1) for a in L.rotation_euler],
                                'energia_W': L.data.energy, 'K': L.data.temperature, 'apunta_a': [round(XW, 2), round(ytg, 2), round(ACZ - 0.05, 2)]})
 
+if LUZ_V42:
+    reg['luz_v42'] = luz_v42.aplicar(sc, lambda p_, x_, y_: reg['iluminacion'].append({'parametro': p_, 'antes': x_, 'despues': y_}))
+    reg['luz_v42_verificacion'] = luz_v42.verificar(sc)
+
 # ================================================================ guardar y vista de control
-bpy.ops.file.pack_all(); bpy.ops.wm.save_as_mainfile(filepath=SAL, copy=True, compress=True)
-cp = bpy.context.preferences.addons['cycles'].preferences; cp.compute_device_type = 'OPTIX'; cp.refresh_devices()
-for dv in cp.devices: dv.use = dv.type == 'OPTIX'
+cp = bpy.context.preferences.addons['cycles'].preferences
+try:
+    cp.compute_device_type = 'OPTIX'; cp.refresh_devices()
+    for dv in cp.devices: dv.use = dv.type == 'OPTIX'
+except TypeError:   # equipo sin NVIDIA (p. ej. el Mac en --sin-render): no hay OptiX; el render real lo exige más abajo
+    cp.devices.foreach_set('use', [False] * len(cp.devices)) if len(cp.devices) else None
 c = sc.cycles; sc.render.engine = 'CYCLES'; c.device = 'GPU'; c.denoiser = 'OPTIX'; c.use_denoising = True; c.denoising_input_passes = 'RGB_ALBEDO_NORMAL'
 c.samples = 512; c.use_adaptive_sampling = True; c.adaptive_threshold = 0.008
 sc.render.resolution_x, sc.render.resolution_y, sc.render.resolution_percentage = 1280, 720, 100
@@ -249,8 +282,22 @@ def camara(nombre, desde, hacia, fov):
     cd.shift_y = ((t_.z - p.z) / dh.length) / (2 * math.tan(math.radians(fov) / 2))
     ob = bpy.data.objects.new(nombre, cd); col.objects.link(ob); ob.location = p; ob.rotation_euler = (math.radians(90), 0, math.atan2(dh.y, dh.x) - math.radians(90)); return ob
 sc.camera = camara('CAM_control_sala_v2', (1.65, 4.45, 1.35), (1.25, 0.6, 1.05), 76)
-sc.view_settings.exposure = 2.1
-t = time.time(); sc.render.filepath = os.path.join(OUT, 'vista_control_sala_v2.png'); bpy.ops.render.render(write_still=True); reg['tiempos_s']['render_control'] = round(time.time() - t, 1)
+bpy.ops.file.pack_all(); os.makedirs(os.path.dirname(os.path.abspath(SAL)), exist_ok=True)
+bpy.ops.wm.save_as_mainfile(filepath=SAL, copy=True, compress=True)
+if SIN_RENDER:
+    reg['tiempos_s']['total'] = round(time.time() - T0, 1); reg['blend'] = SAL; reg['modo'] = 'sin-render (CPU)'
+    json.dump(reg, open(os.path.join(OUT, 'rediseno_sala_v2.json'), 'w'), indent=1, ensure_ascii=False, default=str)
+    print('[sala2] TIEMPOS', reg['tiempos_s']); print('SALA2_OK sin-render'); raise SystemExit(0)
+if not [dv for dv in cp.devices if dv.use and dv.type == 'OPTIX']: raise SystemExit('[sala2] ERROR: sin OptiX (el render necesita la GPU)')
+exp0 = sc.view_settings.exposure
+t = time.time(); bpy.ops.render.render(write_still=False); reg['tiempos_s']['render_control'] = round(time.time() - t, 1)
+def medir():
+    p_ = '/tmp/ora_sala2_eval.png'; bpy.data.images['Render Result'].save_render(p_, scene=sc)
+    im_ = bpy.data.images.load(p_, check_existing=False); px_ = np.array(im_.pixels[:], np.float32).reshape(-1, 4)[:, :3]; bpy.data.images.remove(im_)
+    l_ = px_ @ np.array([0.2126, 0.7152, 0.0722], np.float32)
+    return {'p5': round(float(np.percentile(l_, 5)), 3), 'p50': round(float(np.median(l_)), 3), 'p95': round(float(np.percentile(l_, 95)), 3), 'quemado_%': round(float((px_.max(1) > 0.98).mean() * 100), 3)}
+reg['exposicion_evaluada'] = luz_v42.calibrar_exposicion(sc, medir, inicio=exp0); reg['medidas_control'] = medir()
+bpy.data.images['Render Result'].save_render(os.path.join(OUT, 'vista_control_sala_v2.png'), scene=sc)
 reg['tiempos_s']['total'] = round(time.time() - T0, 1); reg['blend'] = SAL
 json.dump(reg, open(os.path.join(OUT, 'rediseno_sala_v2.json'), 'w'), indent=1, ensure_ascii=False, default=str)
 print('[sala2] TIEMPOS', reg['tiempos_s']); print('SALA2_OK')

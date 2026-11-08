@@ -34,6 +34,15 @@ solo mobiliario y decoración; muros, vanos, puertas, ventanas y dimensiones no 
 - Iluminación: solo se reorientan `Luz_social_1` y `Luz_social_2` hacia el cuadro (potencia y temperatura sin cambio).
 - Una sola vista de control 1280×720 (`CAM_control_sala_v2`).
 
+### Opciones (C3)
+
+- **Luz**: por defecto aplica la luz V4.2 definitiva del módulo común `../comun/luz_v42.py` (la misma de C4), además de los
+  dos focos reorientados al cuadro. `--luz-prueba3` conserva la luz de la prueba 3.
+- **`--sin-render`**: hace todo (simulaciones, obra, mueble TV, luz, cámara de control, copia `.blend`) y se detiene antes del
+  render: sirve para probar en CPU sin GPU.
+- **`ORA_ESCALA_ARTE=0.5`** (variable de entorno): obra a menor resolución solo para pruebas locales; la ejecución real es 4K.
+- La vista de control se renderiza y su exposición se calibra solo en la vista (mediana 0,50–0,55, quemado ≤ 1 %).
+
 ### Correcciones previas a la GPU (8 nov 2026, verificadas en CPU contra la escena v1)
 
 La prueba en seco (`herramientas/prueba_seco_sala_v2.py`, en `tests/produccion-blender.test.cjs`) encontró tres fallos en el
