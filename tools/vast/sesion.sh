@@ -121,7 +121,7 @@ cmd_traer() {
   dest="$RESPALDO_MAC/$marca"; [[ "$SECO" == 1 ]] || mkdir -p "$dest"
   rm -f "$ESTADO_DIR/verificado"   # un nuevo «traer» invalida la verificación anterior hasta completarse
   remoto "cd $VAST_PAQUETE && find $rel -type f -print0 | sort -z | xargs -0 sha256sum" > "$m" || falla "no se pudo generar el manifiesto remoto"
-  for r in "$@"; do mkdir -p "$dest/$(dirname "$r")"; sincronizar "$(ruta_remota "$VAST_PAQUETE/$r")" "$dest/$(dirname "$r")/"; done
+  for r in "$@"; do [[ "$SECO" == 1 ]] || mkdir -p "$dest/$(dirname "$r")"; sincronizar "$(ruta_remota "$VAST_PAQUETE/$r")" "$dest/$(dirname "$r")/"; done
   [[ "$SECO" == 1 ]] && return 0
   cp "$m" "$dest/MANIFIESTO.sha256"
   ( cd "$dest" && shasum -a 256 -c --quiet MANIFIESTO.sha256 ) || falla "verificación SHA-256 FALLIDA en $dest: no se detiene la instancia"

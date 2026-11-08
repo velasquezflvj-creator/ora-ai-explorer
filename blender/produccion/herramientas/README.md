@@ -15,6 +15,10 @@ Ninguna guarda la escena que abre. Se usaron para decidir y verificar los cambio
 | `comparar_blend_props_personalizadas.py` | `blender -b x.blend --python … -- salida.json` | Contenido de las propiedades personalizadas (datos de la propuesta) |
 | `inspeccionar_sala.py` | `blender -b escena.blend --python inspeccionar_sala.py` | Inventario de la sala y piezas sueltas de `MOB_Sala` por material |
 | `calibrar_tela_cojin.py` | `blender -b rediseno_sala/escena_sala_rediseno_v1.blend --python calibrar_tela_cojin.py` | Calibración de la simulación de tela del asiento (no guarda): volumen, hundimiento, estabilidad |
+| `verificar_referencias_sala_v2.py` | `blender -b --factory-startup escena_sala_rediseno_v1.blend --python verificar_referencias_sala_v2.py` | Antes de usar la GPU: existen todos los objetos, materiales, nodos, entradas y ajustes de tela que usa el script V2; cojines cerrados |
+| `prueba_seco_sala_v2.py` | `… --python prueba_seco_sala_v2.py -- <rediseno_sala_v2.py> <carpeta_tmp>` | Ejecuta en CPU el código real de dos secciones del V2 (obra a 1/5 y anillos de costura), sin render ni simulación |
+
+Las dos últimas las ejecuta `tests/produccion-blender.test.cjs` (se omiten si no hay Blender local o respaldo).
 
 Nota: `sol_fugas_y_aberturas.py` lee la dirección del sol desde `rotation_euler` porque `matrix_world` de una luz oculta
 en render no estaba actualizada en segundo plano (un primer análisis la leyó vertical por ese motivo).

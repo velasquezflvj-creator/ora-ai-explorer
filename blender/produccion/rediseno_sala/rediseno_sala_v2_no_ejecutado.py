@@ -33,6 +33,15 @@ def anillos_costura(o, umbral_grados):
         if len(ids) < 12: continue
         ang = [math.atan2(co[i, otros[1]] - cen[otros[1]], co[i, otros[0]] - cen[otros[0]]) for i in ids]
         anillos.append([i for _, i in sorted(zip(ang, ids))])
+    if not anillos:   # cojín decorativo: una sola costura perimetral en el plano medio (no aristas de caja)
+        # la superficie cerrada solo corta el plano medio en la banda perimetral: se toma el lazo de esa banda más cercano
+        # al plano, de un solo lado (los lazos simétricos ±d producirían un vivo en zigzag)
+        d = co[:, k] - cen[k]; lado = d >= 0
+        dmin = np.abs(d[lado]).min() if lado.any() else 0.0
+        ids = [int(i) for i in np.nonzero(lado & (np.abs(np.abs(d) - dmin) <= 0.0015))[0]]
+        if len(ids) >= 12:
+            ang = [math.atan2(co[i, otros[1]] - cen[otros[1]], co[i, otros[0]] - cen[otros[0]]) for i in ids]
+            anillos.append([i for _, i in sorted(zip(ang, ids))])
     return anillos
 def vivo(nombre, o, ids, mat, r=0.0042):
     M = o.matrix_world; cu = bpy.data.curves.new(nombre, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = r; cu.bevel_resolution = 3
@@ -47,7 +56,7 @@ def simular(nombre, colis, cortes, elevar, resorte, presion, frames=40):
     for m in list(o.modifiers): o.modifiers.remove(m)
     bm = bmesh.new(); bm.from_mesh(o.data); bmesh.ops.subdivide_edges(bm, edges=bm.edges[:], cuts=cortes, use_grid_fill=True); bm.to_mesh(o.data); bm.free()
     o.location += Vector(elevar)
-    anillos = anillos_costura(o, 35)
+    anillos = anillos_costura(o, 25)   # 25°: detecta también el lado largo del asiento (con 35° quedaba un tramo de 63 cm sin vivo)
     original = o.data.copy(); v0 = volumen(o.data)
     for c in colis: colisionador(obj(c))
     cl = o.modifiers.new('tela', 'CLOTH'); s = cl.settings
@@ -115,7 +124,7 @@ def trazo(cu_, cv_, ang, largo, ancho, rgb, h_, rug_, opac, mascara=None):
     if mascara is not None: m *= mascara[i0:i1, j0:j1]
     m *= opac; est = 0.5 + 0.5 * np.sin(b_ * 900 + rng.random() * 6) * (0.4 + 0.6 * fino[i0:i1, j0:j1])
     borde = np.exp(-((db - 0.95) / 0.08) ** 2) * (da < 1)
-    color[i0:i1, j0:j1] = color[i0:i1, j0:j1] * (1 - m[..., None]) + (np.array(rgb) * (0.92 + 0.16 * est))[..., None].transpose(0, 1, 2)[..., 0][..., None] * 0 + np.array(rgb)[None, None] * (0.9 + 0.2 * est[..., None]) * m[..., None]
+    color[i0:i1, j0:j1] = color[i0:i1, j0:j1] * (1 - m[..., None]) + np.asarray(rgb, np.float32)[None, None] * (0.9 + 0.2 * est[..., None]) * m[..., None]
     alt[i0:i1, j0:j1] = alt[i0:i1, j0:j1] * (1 - 0.6 * m) + m * (h_ * (0.75 + 0.25 * est)) + 0.35 * h_ * borde * opac
     rug[i0:i1, j0:j1] = rug[i0:i1, j0:j1] * (1 - m) + rug_ * m
 # espátula en el marfil (capas cruzadas, empaste)

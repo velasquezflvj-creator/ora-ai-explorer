@@ -43,6 +43,12 @@
 
 ## 5. Tareas concretas del próximo avance
 
+**Estado al 8 nov 2026 (rama `claude/produccion-blender`, sin publicar todavía):**
+C1 ✅ hecho · C2 ✅ hecho (probado en simulación; falta la primera sesión real) · C3 preparado y verificado en CPU (tres fallos
+corregidos antes de usar la GPU; pendiente de aprobación y revisión X1) · C4 pendiente de aprobación ·
+`AGENTS.md` en la raíz para Codex · pruebas nuevas: `tests/vast-sesion.test.cjs` (8) y `tests/produccion-blender.test.cjs` (4).
+Bloqueo: publicar las ramas requiere que el usuario autentique Git en este Mac.
+
 ### Claude
 - **C1 · Scripts al repositorio.** Mover los scripts de V4, V4.1, V4.2 y del rediseño a `blender/produccion/` con un README por versión y el manifiesto del respaldo. Rama `claude/produccion-blender`.
 - **C2 · `tools/vast/sesion.sh`.** Un solo comando para: sincronizar, preflight, lock, traer resultados con SHA-256 y detener la instancia.

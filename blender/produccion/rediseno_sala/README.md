@@ -34,6 +34,18 @@ solo mobiliario y decoración; muros, vanos, puertas, ventanas y dimensiones no 
 - Iluminación: solo se reorientan `Luz_social_1` y `Luz_social_2` hacia el cuadro (potencia y temperatura sin cambio).
 - Una sola vista de control 1280×720 (`CAM_control_sala_v2`).
 
+### Correcciones previas a la GPU (8 nov 2026, verificadas en CPU contra la escena v1)
+
+La prueba en seco (`herramientas/prueba_seco_sala_v2.py`, en `tests/produccion-blender.test.cjs`) encontró tres fallos en el
+borrador original (copia sin corregir en `apartamento-102/capturas/rediseno-sala/borrador_v2_no_ejecutado/`):
+
+1. **Trazos de la obra**: multiplicaba un color RGB (3,) por una textura 2D → `ValueError` de numpy. Habría abortado la
+   ejecución en la GPU después de simular los cojines. Corregido.
+2. **Vivos de los cojines decorativos**: 0 costuras detectadas (su costura está en el plano medio, no en aristas de caja).
+   Ahora se toma el lazo de la banda perimetral más cercano al plano medio, de un solo lado: 264 vértices, tramo máximo 14 mm.
+3. **Vivo del asiento**: con umbral de 35° faltaba un tramo de 63 cm del lado largo; con 25° la costura es continua
+   (180 vértices, tramo máximo 45 mm).
+
 ```bash
 $B -b v4/escena_v4_2_prueba3.blend --python rediseno_sala/rediseno_sala_v1.py -- $PWD/rediseno_sala/escena_sala_rediseno_v1.blend $PWD/datos/rediseno_sala/previas
 $B -b rediseno_sala/escena_sala_rediseno_v1.blend --python rediseno_sala/rediseno_sala_v2_no_ejecutado.py -- $PWD/rediseno_sala/escena_sala_rediseno_v2.blend $PWD/datos/rediseno_sala/control
